@@ -1,0 +1,6 @@
+{
+  "name": "REBAZ TV",
+  "description": "REBAZ TV - Android TV Live Stream Player with ExoPlayer, fast channel switching, preview & fullscreen modes, and search",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
