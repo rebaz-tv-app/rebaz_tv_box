@@ -296,11 +296,7 @@ fun FullscreenPlayerView(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
-                        // Channel badge
-                        ChannelLogoBadge(
-                            badgeText = channel?.logoBadge ?: "TV",
-                            channelId = channel?.id ?: ""
-                        )
+                        
 
                         Column {
                             Row(verticalAlignment = Alignment.CenterVertically) {
