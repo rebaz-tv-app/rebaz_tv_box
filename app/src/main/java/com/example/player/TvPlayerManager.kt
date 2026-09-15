@@ -74,9 +74,9 @@ class TvPlayerManager(private val context: Context) {
             .setForceHighestSupportedBitrate(true)
             .setAllowVideoMixedMimeTypeAdaptiveness(true)
             .setAllowVideoNonSeamlessAdaptiveness(true)
-            .setExceedAudioCapabilitiesIfNecessary(true)
-            .setExceedRendererCapabilitiesIfNecessary(true)
     )
+}
+
 }
 
         }
