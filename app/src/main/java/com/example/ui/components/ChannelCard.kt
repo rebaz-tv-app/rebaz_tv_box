@@ -7,7 +7,6 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
@@ -117,35 +115,5 @@ fun ChannelCard(
                 )
             }
         }
-
-
-    // Unique color theme for channel badges to look vivid like real TV logos
-    val gradient = when {
-        cleanText.contains("Stv", ignoreCase = true) -> listOf(Color(0xFFEAB308), Color(0xFFCA8A04))
-        cleanText.contains("K24", ignoreCase = true) -> listOf(Color(0xFF0284C7), Color(0xFF0369A1))
-        cleanText.contains("KURD", ignoreCase = true) -> listOf(Color(0xFF9333EA), Color(0xFF7E22CE))
-        cleanText.contains("RENG", ignoreCase = true) -> listOf(Color(0xFF16A34A), Color(0xFF15803D))
-        cleanText.contains("ASTERA", ignoreCase = true) -> listOf(Color(0xFF2563EB), Color(0xFF1D4ED8))
-        cleanText.contains("sima", ignoreCase = true) -> listOf(Color(0xFFDC2626), Color(0xFFB91C1C))
-        cleanText.contains("MMN", ignoreCase = true) -> listOf(Color(0xFFF97316), Color(0xFFC2410C))
-        cleanText.contains("RUDAW", ignoreCase = true) -> listOf(Color(0xFFE11D48), Color(0xFFBE123C))
-        else -> listOf(Color(0xFF334155), Color(0xFF1E293B))
-    }
-
-    Box(
-        modifier = Modifier
-            .size(38.dp, 28.dp)
-            .clip(RoundedCornerShape(6.dp))
-            .background(Brush.linearGradient(gradient))
-            .border(1.dp, Color(0x40FFFFFF), RoundedCornerShape(6.dp)),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = cleanText,
-            color = Color.White,
-            fontSize = 10.sp,
-            fontWeight = FontWeight.ExtraBold,
-            maxLines = 1
-        )
     }
 }
