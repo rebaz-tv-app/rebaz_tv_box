@@ -6,7 +6,7 @@ data class Channel(
     val name: String,
     val category: String,
     val streamUrl: String,
-    val logoUrl: String = "", // گۆڕا بۆ لینکی وێنەی لۆگۆ
+    val logoBadge: String = "",
     val subtitle: String = "پەخشی ڕاستەوخۆ بە کوالێتی بەرز",
     val isFavorite: Boolean = false,
     val isHd: Boolean = true
