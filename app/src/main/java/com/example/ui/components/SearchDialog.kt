@@ -271,7 +271,4 @@ private fun SearchResultItem(
                 )
             }
         }
-
-        ChannelLogoBadge(badgeText = channel.logoBadge, channelId = channel.id)
-    }
-}
+        
