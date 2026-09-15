@@ -340,7 +340,7 @@ fun FullscreenPlayerView(
                                 Text(
                                     text = "${channel?.number?.toString()?.padStart(2, '0') ?: "01"} - ${channel?.name ?: "Channel"}",
                                     color = Color.White,
-                                    fontSize = 20.sp,
+                                    fontSize = 30.sp,
                                     fontWeight = FontWeight.Bold
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
