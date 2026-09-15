@@ -101,7 +101,7 @@ fun ChannelCard(
             Text(
                 text = channel.name,
                 color = if (hasActiveFocus) Color(0xFFFFE66D) else Color.White,
-                fontSize = 14.sp,
+                fontSize = 12.sp,
                 fontWeight = if (hasActiveFocus || isPlaying) FontWeight.Bold else FontWeight.Medium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
