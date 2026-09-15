@@ -66,7 +66,7 @@ fun ChannelCard(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(32.dp)
+            .height(42.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(backgroundColor)
             .border(borderWidth, borderColor, RoundedCornerShape(8.dp))
