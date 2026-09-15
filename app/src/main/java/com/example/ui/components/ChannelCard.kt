@@ -126,12 +126,24 @@ fun ChannelCard(
 }
 
 @Composable
-fun ChannelLogoBadge(badgeText: String, channelId: String) {
-    val cleanText = if (badgeText.startsWith("http", ignoreCase = true) || badgeText.contains("/")) {
-        "HD"
-    } else {
-        badgeText.take(5).uppercase().ifBlank { "HD" }
+fun ChannelLogoBadge(logoUrl: String) {
+    Box(
+        modifier = Modifier
+            .size(38.dp, 28.dp)
+            .clip(RoundedCornerShape(6.dp))
+            .background(Color(0xFF1E293B))
+            .border(1.dp, Color(0x40FFFFFF), RoundedCornerShape(6.dp)),
+        contentAlignment = Alignment.Center
+    ) {
+        AsyncImage(
+            model = logoUrl,
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
     }
+}
+
 
     // Unique color theme for channel badges to look vivid like real TV logos
     val gradient = when {
