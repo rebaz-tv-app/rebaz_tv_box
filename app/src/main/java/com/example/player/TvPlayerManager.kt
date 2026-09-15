@@ -2,6 +2,8 @@ package com.example.player
 
 import android.content.Context
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import androidx.annotation.OptIn
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
@@ -38,15 +40,24 @@ class TvPlayerManager(private val context: Context) {
     private val _currentStreamUrl = MutableStateFlow<String?>(null)
     val currentStreamUrl: StateFlow<String?> = _currentStreamUrl.asStateFlow()
 
+    // سیستەمی زیرەک بۆ دووبارە هەوڵدانەوە کاتێک پەخش دەپچڕێت
+    private var retryCount = 0
+    private val maxRetries = 5 // ٥ جار هەوڵ دەدات پێش ئەوەی شاشە سوورەکە پیشان بدات
+
     private val playerListener = object : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: Int) {
             when (playbackState) {
                 Player.STATE_BUFFERING -> _playbackState.value = PlaybackUiState.Buffering
-                Player.STATE_READY -> _playbackState.value = PlaybackUiState.Playing
-                Player.STATE_ENDED -> _playbackState.value = PlaybackUiState.Error("پەخشی ئەم کەناڵە لە ئێستادا کارا نیە")
+                Player.STATE_READY -> {
+                    retryCount = 0 // ئەگەر پەخشەکە سەرکەوتوو بوو، ژمارەی هەوڵەکان سفر دەکرێتەوە
+                    _playbackState.value = PlaybackUiState.Playing
+                }
+                Player.STATE_ENDED -> {
+                    attemptRetry() // لەجیاتی وەستان، هەوڵی پێکردنەوە دەدات
+                }
                 Player.STATE_IDLE -> {
                     if (exoPlayer?.playerError != null) {
-                        _playbackState.value = PlaybackUiState.Error("پەخشی ئەم کەناڵە لە ئێستادا کارا نیە")
+                        attemptRetry()
                     } else {
                         _playbackState.value = PlaybackUiState.Idle
                     }
@@ -55,7 +66,25 @@ class TvPlayerManager(private val context: Context) {
         }
 
         override fun onPlayerError(error: PlaybackException) {
-            _playbackState.value = PlaybackUiState.Error("پەخشی ئەم کەناڵە لە ئێستادا کارا نیە")
+            attemptRetry()
+        }
+
+        private fun attemptRetry() {
+            if (retryCount < maxRetries) {
+                retryCount++
+                _playbackState.value = PlaybackUiState.Buffering
+                
+                // دوای ٢ چرکە هەوڵی پێکردنەوەی کەناڵەکە دەداتەوە بێ ئەوەی بەکارهێنەر بێزار بکات
+                Handler(Looper.getMainLooper()).postDelayed({
+                    _currentStreamUrl.value?.let {
+                        exoPlayer?.setMediaItem(MediaItem.fromUri(it))
+                        exoPlayer?.prepare()
+                        exoPlayer?.play()
+                    }
+                }, 2000)
+            } else {
+                _playbackState.value = PlaybackUiState.Error("پەخشی ئەم کەناڵە لە ئێستادا کارا نیە")
+            }
         }
     }
 
@@ -76,20 +105,22 @@ class TvPlayerManager(private val context: Context) {
             )
         }
 
+        // خەزنکردنێکی زۆر گەورەتر بۆ ئەوەی زوو نەوەستێت
         val loadControl = DefaultLoadControl.Builder()
             .setBufferDurationsMs(
-                10_000,
-                45_000,
-                800,
-                1500
+                32_000, // کەمترین ٣٢ چرکە خەزن دەکات
+                65_536, // زۆرترین ٦٥ چرکە
+                2500,
+                5000
             )
             .build()
 
+        // ناسنامەی ساختە (فێڵ)، تا سێرڤەرەکە وا بزانێت لەسەر وێبگەڕی کۆمپیوتەری ویندۆزە
         val httpDataSourceFactory = DefaultHttpDataSource.Factory()
             .setAllowCrossProtocolRedirects(true)
             .setConnectTimeoutMs(20_000)
             .setReadTimeoutMs(20_000)
-            .setUserAgent("Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.36 ExoPlayer")
+            .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
 
         val dataSourceFactory = DefaultDataSource.Factory(context, httpDataSourceFactory)
         val mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
@@ -115,6 +146,7 @@ class TvPlayerManager(private val context: Context) {
     }
 
     fun playStream(url: String) {
+        retryCount = 0 // کاتێک کەناڵ دەگۆڕێت با ژمارەی هەوڵەکان سفر ببێتەوە
         val player = getPlayer()
         if (url.isBlank()) {
             _currentStreamUrl.value = null
@@ -145,6 +177,7 @@ class TvPlayerManager(private val context: Context) {
     }
 
     fun retry() {
+        retryCount = 0
         _currentStreamUrl.value?.let { playStream(it) }
     }
 
