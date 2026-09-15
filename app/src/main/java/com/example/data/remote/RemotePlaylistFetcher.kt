@@ -175,19 +175,23 @@ class RemotePlaylistFetcher(
                         }
                     }
                     val catId = mapCategoryStringToId(currentCategory)
+                    
+// ئەم دێڕانە زیاد بکە:
+val displayCatName = if (catId == "all") "هەموو کەناڵەکان" else currentCategory
 
-                    channels.add(
-                        Channel(
-                            id = "m3u_${currentNumber}_${currentName.hashCode()}",
-                            number = currentNumber,
-                            name = currentName.ifEmpty { "کەناڵی $currentNumber" },
-                            category = catId,
-                            streamUrl = trimmed,
-                            logoBadge = badge,
-                            subtitle = "پەخشی ڕاستەوخۆ ($currentCategory)",
-                            isHd = true
-                        )
-                    )
+channels.add(
+    Channel(
+        id = "m3u_${currentNumber}_${currentName.hashCode()}",
+        number = currentNumber,
+        name = currentName.ifEmpty { "کەناڵی $currentNumber" },
+        category = catId, // ئێستا ئەمە ناوی پاکێجە ڕاستەقینەکەیە
+        streamUrl = trimmed,
+        logoBadge = badge,
+        subtitle = displayCatName, // لێرەدا ناوەکە پیشان دەدات
+        isHd = true
+    )
+)
+
                     currentNumber++
                     currentName = ""
                     currentCategory = "all"
@@ -247,16 +251,12 @@ class RemotePlaylistFetcher(
         return channels
     }
 
-    private fun mapCategoryStringToId(catName: String): String {
-        val lower = catName.lowercase()
-        return when {
-            lower.contains("doc") || lower.contains("بەڵگەنامەیی") || lower.contains("دۆکۆمێنتاری") -> "doc"
-            lower.contains("news") || lower.contains("هەواڵ") -> "news"
-            lower.contains("kurd") || lower.contains("کوردی") -> "kurdish"
-            lower.contains("sport") || lower.contains("وەرزش") -> "sports"
-            lower.contains("kid") || lower.contains("منداڵ") || lower.contains("cart") -> "kids"
-            lower.contains("relig") || lower.contains("قورئان") || lower.contains("ئاین") || lower.contains("islam") -> "religion"
-            else -> "all"
+        private fun mapCategoryStringToId(catName: String): String {
+        val cleanName = catName.trim()
+        return if (cleanName.isEmpty() || cleanName.equals("all", ignoreCase = true)) {
+            "all"
+        } else {
+            cleanName 
         }
     }
 }
