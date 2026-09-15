@@ -279,16 +279,21 @@ class TvViewModel(application: Application) : AndroidViewModel(application) {
                     if (result is PlaylistResult.Success && result.channels.isNotEmpty()) {
                         _allChannels.value = result.channels
 
-                        if (!result.categories.isNullOrEmpty()) {
-                            val mergedCategories = result.categories.toMutableList()
-                            if (mergedCategories.none { it.id == "favorites" }) {
-                                mergedCategories.add(Category("favorites", "دڵخوازەکان"))
-                            }
-                            if (mergedCategories.none { it.id == "all" }) {
-                                mergedCategories.add(Category("all", "هەموو کەناڵەکان"))
-                            }
-                            _categories.value = mergedCategories
-                        }
+                        // دروستکردنی پاکێجەکان ڕاستەوخۆ لەناو کەناڵەکانەوە
+val newCategories = result.channels.map { it.category }
+    .distinct()
+    .filter { it != "all" && it != "favorites" }
+    .map { Category(id = it, nameKurdish = it) }
+    .toMutableList()
+
+if (newCategories.none { it.id == "favorites" }) {
+    newCategories.add(Category("favorites", "دڵخوازەکان"))
+}
+if (newCategories.none { it.id == "all" }) {
+    newCategories.add(0, Category("all", "هەموو کەناڵەکان")) 
+}
+_categories.value = newCategories
+
 
                         val currentPlaying = _playingChannel.value
                         val exists = result.channels.any { it.id == currentPlaying?.id }
