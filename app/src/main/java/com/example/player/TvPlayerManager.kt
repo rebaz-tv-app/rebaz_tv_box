@@ -69,12 +69,16 @@ class TvPlayerManager(private val context: Context) {
     private fun initPlayer() {
         // High quality video track selector
         val trackSelector = DefaultTrackSelector(context).apply {
-            setParameters(
-                buildUponParameters()
-                    .setForceHighestSupportedBitrate(true)
-                    .setAllowVideoMixedMimeTypeAdaptiveness(true)
-                    .setAllowVideoNonSeamlessAdaptiveness(true)
-            )
+    setParameters(
+        buildUponParameters()
+            .setForceHighestSupportedBitrate(true)
+            .setAllowVideoMixedMimeTypeAdaptiveness(true)
+            .setAllowVideoNonSeamlessAdaptiveness(true)
+            .setExceedAudioCapabilitiesIfNecessary(true)
+            .setExceedRendererCapabilitiesIfNecessary(true)
+    )
+}
+
         }
 
         // Fast responsive buffering for live and on-demand streaming
