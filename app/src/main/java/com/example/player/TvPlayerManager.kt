@@ -67,26 +67,21 @@ class TvPlayerManager(private val context: Context) {
     }
 
     private fun initPlayer() {
-        // High quality video track selector
         val trackSelector = DefaultTrackSelector(context).apply {
-    setParameters(
-        buildUponParameters()
-            .setForceHighestSupportedBitrate(true)
-            .setAllowVideoMixedMimeTypeAdaptiveness(true)
-            .setAllowVideoNonSeamlessAdaptiveness(true)
-    )
-}
-
-
+            setParameters(
+                buildUponParameters()
+                    .setForceHighestSupportedBitrate(true)
+                    .setAllowVideoMixedMimeTypeAdaptiveness(true)
+                    .setAllowVideoNonSeamlessAdaptiveness(true)
+            )
         }
 
-        // Fast responsive buffering for live and on-demand streaming
         val loadControl = DefaultLoadControl.Builder()
             .setBufferDurationsMs(
-                /* minBufferMs = */ 10_000,
-                /* maxBufferMs = */ 45_000,
-                /* bufferForPlaybackMs = */ 800,
-                /* bufferForPlaybackAfterRebufferMs = */ 1500
+                10_000,
+                45_000,
+                800,
+                1500
             )
             .build()
 
@@ -136,7 +131,6 @@ class TvPlayerManager(private val context: Context) {
         val uri = Uri.parse(url)
         val mediaItemBuilder = MediaItem.Builder().setUri(uri)
 
-        // Detect HLS or DASH by extension if applicable
         val path = uri.path?.lowercase() ?: ""
         when {
             path.endsWith(".m3u8") -> mediaItemBuilder.setMimeType(MimeTypes.APPLICATION_M3U8)
