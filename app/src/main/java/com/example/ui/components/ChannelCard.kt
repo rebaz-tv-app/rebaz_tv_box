@@ -118,20 +118,6 @@ fun ChannelCard(
             }
         }
 
-        Spacer(modifier = Modifier.width(8.dp))
-
-        // Right side badge/logo matching the screenshot
-        ChannelLogoBadge(badgeText = channel.logoBadge, channelId = channel.id)
-    }
-}
-
-@Composable
-fun ChannelLogoBadge(badgeText: String, channelId: String) {
-    val cleanText = if (badgeText.startsWith("http", ignoreCase = true) || badgeText.contains("/")) {
-        "HD"
-    } else {
-        badgeText.take(5).uppercase().ifBlank { "HD" }
-    }
 
     // Unique color theme for channel badges to look vivid like real TV logos
     val gradient = when {
