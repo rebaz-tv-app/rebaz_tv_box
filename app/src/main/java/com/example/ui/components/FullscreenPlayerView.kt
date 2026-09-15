@@ -37,7 +37,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,6 +57,7 @@ import androidx.compose.ui.unit.sp
 import androidx.media3.exoplayer.ExoPlayer
 import com.example.data.model.Channel
 import com.example.player.PlaybackUiState
+import kotlinx.coroutines.delay
 
 @Composable
 fun FullscreenPlayerView(
@@ -75,6 +80,18 @@ fun FullscreenPlayerView(
 
     val focusRequester = remember { FocusRequester() }
 
+    // گۆڕاوەکان بۆ کۆنتڕۆڵکردنی کاتژمێری شاردنەوەی دوگمەکان
+    var showControls by remember { mutableStateOf(true) }
+    var resetTimer by remember { mutableIntStateOf(0) }
+
+    // کاتژمێری خۆکار بۆ شاردنەوەی دوگمەکانی سەر شاشە دوای ٤ چرکە
+    LaunchedEffect(showControls, resetTimer) {
+        if (showControls) {
+            delay(4000)
+            showControls = false
+        }
+    }
+
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
@@ -86,6 +103,10 @@ fun FullscreenPlayerView(
             .focusRequester(focusRequester)
             .focusable()
             .onKeyEvent { keyEvent ->
+                // کاتێک بە کۆنتڕۆڵ یان کیبۆرد دوگمەیەک دادەگیرێت، با کۆنتڕۆڵەکان دەربکەون
+                showControls = true
+                resetTimer++
+                
                 if (keyEvent.nativeKeyEvent.action == KeyEvent.ACTION_DOWN) {
                     when (keyEvent.nativeKeyEvent.keyCode) {
                         KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_CHANNEL_UP, KeyEvent.KEYCODE_PAGE_UP -> {
@@ -112,7 +133,10 @@ fun FullscreenPlayerView(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ) {
+                // کاتێک پەنجە دەدەیت لە شاشەکە کۆنتڕۆڵەکان دەردەکەون یان دەشارێنەوە
                 onTriggerOsd()
+                showControls = !showControls
+                if (showControls) resetTimer++
             }
             .testTag("fullscreen_player_view")
     ) {
@@ -173,7 +197,10 @@ fun FullscreenPlayerView(
         }
 
         // On-Screen TV Navigation Arrows (Up / Down) for easy switching via touch or mouse
-        Box(
+        AnimatedVisibility(
+            visible = showControls,
+            enter = fadeIn(),
+            exit = fadeOut(),
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .padding(end = 16.dp)
@@ -183,7 +210,12 @@ fun FullscreenPlayerView(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 IconButton(
-                    onClick = onChannelUp,
+                    onClick = {
+                        onChannelUp()
+                        // کاتێک کلیک کرا، کاتژمێرەکە نوێ دەبێتەوە بۆ ئەوەی خێرا دیار نەمێنێت
+                        showControls = true
+                        resetTimer++
+                    },
                     modifier = Modifier
                         .size(44.dp)
                         .clip(CircleShape)
@@ -199,7 +231,12 @@ fun FullscreenPlayerView(
                 }
 
                 IconButton(
-                    onClick = onChannelDown,
+                    onClick = {
+                        onChannelDown()
+                        // کاتێک کلیک کرا، کاتژمێرەکە نوێ دەبێتەوە بۆ ئەوەی خێرا دیار نەمێنێت
+                        showControls = true
+                        resetTimer++
+                    },
                     modifier = Modifier
                         .size(44.dp)
                         .clip(CircleShape)
