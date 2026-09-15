@@ -77,7 +77,6 @@ class TvPlayerManager(private val context: Context) {
     )
 }
 
-}
 
         }
 
