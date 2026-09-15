@@ -42,13 +42,7 @@ fun BottomBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         // TV Brand label in center-left subtle gray
-        Text(
-            text = "REBAZ TV • LGNANO",
-            color = Color(0xFF475569),
-            fontSize = 11.sp,
-            fontWeight = FontWeight.SemiBold,
-            letterSpacing = 1.sp
-        )
+        
 
         // Action items matching screenshot bottom right
         Row(
