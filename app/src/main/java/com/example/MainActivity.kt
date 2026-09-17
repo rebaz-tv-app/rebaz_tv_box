@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
                     // ئەگەر چالاک نەکرابوو، شاشەی قوفڵەکە دەکرێتەوە
                     ActivationScreen(
                         onActivated = {
-                            isActivated = tru
+                            isActivated = true
                         }
                     )
                 }
