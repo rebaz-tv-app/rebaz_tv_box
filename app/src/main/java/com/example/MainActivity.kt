@@ -14,6 +14,11 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.ui.RebazTvMainScreen
 import com.example.ui.TvViewModel
 import com.example.ui.theme.MyApplicationTheme
+import android.content.Context
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+import com.example.ui.components.ActivationScreen
+
 
 class MainActivity : ComponentActivity() {
 
@@ -30,34 +35,29 @@ class MainActivity : ComponentActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        setContent {
+                setContent {
             MyApplicationTheme {
-                RebazTvMainScreen(
-                    viewModel = viewModel,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-        }
-    }
+                val context = LocalContext.current
+                val prefs = context.getSharedPreferences("rebaz_tv_prefs", Context.MODE_PRIVATE)
+                
+                // سەیر دەکات بزانێت پێشتر چالاک کراوە یان نا
+                var isActivated by remember { mutableStateOf(prefs.getBoolean("is_activated", false)) }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (viewModel.isFullscreen.value) {
-            when (keyCode) {
-                KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_CHANNEL_UP, KeyEvent.KEYCODE_PAGE_UP -> {
-                    viewModel.onChannelUp()
-                    return true
-                }
-                KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_PAGE_DOWN -> {
-                    viewModel.onChannelDown()
-                    return true
-                }
-                KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> {
-                    if (viewModel.exitFullscreen()) {
-                        return true
-                    }
+                if (isActivated) {
+                    // ئەگەر چالاک کرابوو، شاشەی کەناڵەکان دەکرێتەوە
+                    RebazTvMainScreen(
+                        viewModel = viewModel,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    // ئەگەر چالاک نەکرابوو، شاشەی قوفڵەکە دەکرێتەوە
+                    ActivationScreen(
+                        onActivated = {
+                            isActivated = true
+                        }
+                    )
                 }
             }
         }
-        return super.onKeyDown(keyCode, event)
     }
 }
