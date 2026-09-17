@@ -22,7 +22,7 @@ class ChannelRepository(
         const val PREF_LAST_CATEGORY_ID = "last_category_id"
         const val DEFAULT_CATEGORY_ID = "doc"
         const val DEFAULT_CHANNEL_ID = "ch_doc_5" // Shna Documentary (from screenshot!)
-        const val FIXED_PLAYLIST_URL = "http://arabitv5.com:8000/get.php?username=Montaha.Maarouf&password=Maarouf.56432976&type=m3u_plus"
+        const val FIXED_PLAYLIST_URL = "https://raw.githubusercontent.com/rebaz92/Xurmatw/refs/heads/main/xurmatw"
     }
 
     val categories = listOf(
