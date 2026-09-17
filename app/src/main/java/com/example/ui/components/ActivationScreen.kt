@@ -99,13 +99,15 @@ fun ActivationScreen(onActivated: () -> Unit) {
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color(0xFF374151),
-                    unfocusedBorderColor = Color(0xFF1F2937),
-                    containerColor = Color(0xFF0B0F19),
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White
-                ),
+                colors = OutlinedTextFieldDefaults.colors(
+    focusedBorderColor = Color(0xFF374151),
+    unfocusedBorderColor = Color(0xFF1F2937),
+    focusedContainerColor = Color(0xFF0B0F19),
+    unfocusedContainerColor = Color(0xFF0B0F19),
+    focusedTextColor = Color.White,
+    unfocusedTextColor = Color.White
+),
+
                 singleLine = true,
                 textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center, fontSize = 18.sp),
                 isError = isError
