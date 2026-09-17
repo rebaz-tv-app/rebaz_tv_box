@@ -109,7 +109,7 @@ fun SearchDialog(
                     onValueChange = onQueryChange,
                     placeholder = {
                         Text(
-                            text = "ناوی کەناڵ یان ژمارە بنووسە (بۆ نموونە: Shna یان 5)",
+                            text = "ناوی کەناڵ یان ژمارە بنووسە",
                             color = Color(0xFF64748B)
                         )
                     },
