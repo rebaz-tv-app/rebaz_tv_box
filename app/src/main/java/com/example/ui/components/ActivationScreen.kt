@@ -36,7 +36,7 @@ fun ActivationScreen(onActivated: () -> Unit) {
     var codeInput by remember { mutableStateOf("") }
     var isError by remember { mutableStateOf(false) }
 
-    // ** کۆدی ئێستات لێرە بنووسە (هەر کاتێک گۆڕیت، ئەپدەیت بگرە) **
+    // کۆدە چالاککردنەکەی ئێستات (دەتوانیت هەر کاتێک ویستت لێرە بیگۆڕیت)
     val CORRECT_CODE = "1122"
 
     val infiniteTransition = rememberInfiniteTransition(label = "glow")
@@ -161,7 +161,6 @@ fun ActivationScreen(onActivated: () -> Unit) {
                 Button(
                     onClick = {
                         if (codeInput.trim() == CORRECT_CODE) { 
-                            // ** لێرەدا ناوەکەی دەکەین بە v1 (یاخود v2, v3 هەر کاتێک کۆدت گۆڕی) **
                             val prefs = context.getSharedPreferences("rebaz_tv_prefs", Context.MODE_PRIVATE)
                             prefs.edit().putBoolean("is_activated_v1", true).apply()
                             onActivated()
