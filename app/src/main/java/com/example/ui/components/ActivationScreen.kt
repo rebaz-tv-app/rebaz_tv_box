@@ -36,14 +36,13 @@ fun ActivationScreen(onActivated: () -> Unit) {
     var codeInput by remember { mutableStateOf("") }
     var isError by remember { mutableStateOf(false) }
 
-    // لێرەدا کۆدە نهێنییەکە بنووسە کە دەتەوێت خەڵک پێی چالاک بکات
-    val CORRECT_CODE = "REBAZ2026"
+    // کۆدە نهێنییەکەی تۆ
+    val CORRECT_CODE = "1122"
 
-    // ئەنیمەیشنی ڕووناکی دەوری کلیلەکە (شەپۆل دەدات)
     val infiniteTransition = rememberInfiniteTransition(label = "glow")
     val glowScale by infiniteTransition.animateFloat(
         initialValue = 1f,
-        targetValue = 1.4f,
+        targetValue = 1.3f,
         animationSpec = infiniteRepeatable(
             animation = tween(1500, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Reverse
@@ -61,28 +60,28 @@ fun ActivationScreen(onActivated: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF080D1A)), // ڕەنگی باکگراوندی دەرەوە
+            .background(Color(0xFF080D1A)),
         contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .width(550.dp) // پانمان کردووەتەوە بۆ شاشەی تەلەفزیۆن
-                .clip(RoundedCornerShape(24.dp))
+                .widthIn(max = 500.dp) 
+                .fillMaxWidth(0.9f)
+                .clip(RoundedCornerShape(20.dp))
                 .background(Color(0xFF111827))
-                .verticalScroll(rememberScrollState()) // بۆ ئەوەی هەرگیز دوگمەکان نەچنە دەرەوەی شاشە
-                .padding(32.dp)
+                .verticalScroll(rememberScrollState())
+                .padding(vertical = 16.dp, horizontal = 20.dp) // بۆشاییەکان زۆر کەم کرانەوە تا جێگەی ببێتەوە
         ) {
             
-            // بەشی کلیلەکە و ڕووناکییە جووڵاوەکەی دەوری
+            // کلیل و ڕووناکییەکە بە قەبارەیەکی گونجاو بۆ شاشەی پانی
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.size(100.dp)
+                modifier = Modifier.size(64.dp)
             ) {
-                // ڕووناکییە جووڵاوەکە (Glow)
                 Box(
                     modifier = Modifier
-                        .size(60.dp)
+                        .size(46.dp)
                         .graphicsLayer {
                             scaleX = glowScale
                             scaleY = glowScale
@@ -96,58 +95,54 @@ fun ActivationScreen(onActivated: () -> Unit) {
                         )
                 )
                 
-                // خودی کلیلەکە لەسەرەوەی ڕووناکییەکە
                 Box(
                     modifier = Modifier
-                        .size(64.dp)
+                        .size(48.dp)
                         .clip(CircleShape)
-                        .background(Color(0xFF1F2937)) // ڕەنگی پشتەوەی کلیلەکە تۆختر
-                        .shadow(8.dp, CircleShape),
+                        .background(Color(0xFF1F2937))
+                        .shadow(6.dp, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Default.VpnKey,
                         contentDescription = "Key",
                         tint = Color(0xFFFFC107),
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            // سەردێڕ
             Text(
                 text = "چالاککردنی ئەپڵیکەیشن",
                 color = Color.White,
-                fontSize = 26.sp,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(
+                text = "تکایە کۆدی چالاکبوون بنووسە بۆ چالاککردنی تەواوی ئەپەکە و بینینی هەموو کەناڵەکان. تێبینی: کۆدی ئەکتیڤکردن مانگی جارێک دەگۆڕێت بۆ دەستگەیشتن بە کۆدی نوێ سەردانی چەناڵی REBAZ TV بکە لە تێلیگرام.",
+                color = Color(0xFF9CA3AF),
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+                lineHeight = 18.sp,
+                modifier = Modifier.padding(horizontal = 4.dp)
+            )
+            
+            Spacer(modifier = Modifier.height(4.dp))
+            
+            // لینکی تێلیگرامە نوێیەکەی تۆ
+            Text(
+                text = "https://t.me/rebaz_tv",
+                color = Color(0xFF60A5FA),
+                fontSize = 12.sp
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // تێکستە درێژەکەی خۆت کە لە وێنەکەدا هەبوو
-            Text(
-                text = "تکایە کۆدی چالاکبوون بنووسە بۆ چالاککردنی تەواوی ئەپەکە و بینینی هەموو کەناڵەکان. تێبینی: کۆدی ئەکتیڤکردن مانگی جارێک دەگۆڕێت بۆ دەستگەیشتن بە کۆدی نوێ سەردانی چەناڵی REBAZ TV بکە لە تێلیگرام.",
-                color = Color(0xFF9CA3AF),
-                fontSize = 15.sp,
-                textAlign = TextAlign.Center,
-                lineHeight = 24.sp,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            // لینکی تێلیگرام بە شین
-            Text(
-                text = "https://t.me/rebaz92",
-                color = Color(0xFF60A5FA),
-                fontSize = 14.sp
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // شوێنی نووسینی کۆد
             OutlinedTextField(
                 value = codeInput,
                 onValueChange = {
@@ -157,8 +152,9 @@ fun ActivationScreen(onActivated: () -> Unit) {
                 placeholder = {
                     Text("کۆدەکە لێرە بنووسە", color = Color(0xFF6B7280), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
                 },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
+                // بەرزی خانەی نووسینەکە کەم کرایەوە بۆ 54
+                modifier = Modifier.fillMaxWidth(0.85f).height(54.dp),
+                shape = RoundedCornerShape(10.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFF374151),
                     unfocusedBorderColor = Color(0xFF1F2937),
@@ -168,25 +164,24 @@ fun ActivationScreen(onActivated: () -> Unit) {
                     unfocusedTextColor = Color.White
                 ),
                 singleLine = true,
-                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center, fontSize = 20.sp, fontWeight = FontWeight.Bold),
+                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center, fontSize = 16.sp, fontWeight = FontWeight.Bold),
                 isError = isError
             )
 
+            // شوێنی ئیرۆرەکە ڕێکخرا بۆ ئەوەی جێگە نەگرێت
             if (isError) {
-                Text("کۆدەکە هەڵەیە، تکایە دڵنیابەرەوە", color = Color.Red, fontSize = 12.sp, modifier = Modifier.padding(top = 8.dp))
+                Text("کۆدەکە هەڵەیە، تکایە دڵنیابەرەوە", color = Color.Red, fontSize = 11.sp, modifier = Modifier.padding(top = 4.dp, bottom = 4.dp))
+            } else {
+                Spacer(modifier = Modifier.height(14.dp))
             }
 
-            Spacer(modifier = Modifier.height(28.dp))
-
-            // دوگمەکان لە تەنیشت یەکتر
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // دوگمەی داواکردنی کۆد (تێلیگرام)
                 Button(
                     onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/rebaz92"))
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/rebaz_tv"))
                         try {
                             context.startActivity(intent)
                         } catch (e: Exception) {
@@ -195,21 +190,20 @@ fun ActivationScreen(onActivated: () -> Unit) {
                     },
                     modifier = Modifier
                         .weight(1f)
-                        .height(56.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E293B))
+                        .height(44.dp), // بەرزی دوگمەکان زۆر گونجاو کران
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E293B)),
+                    contentPadding = PaddingValues(0.dp)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Send, contentDescription = null, tint = Color(0xFF60A5FA), modifier = Modifier.size(18.dp))
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("داوای کۆد بکە", color = Color(0xFF60A5FA), fontSize = 15.sp)
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                        Icon(Icons.Default.Send, contentDescription = null, tint = Color(0xFF60A5FA), modifier = Modifier.size(16.dp))
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("داوای کۆد بکە", color = Color(0xFF60A5FA), fontSize = 13.sp)
                     }
                 }
 
-                // دوگمەی چالاککردن بە ڕەنگی زەرد/پرتەقاڵی
                 Button(
                     onClick = {
-                        // .trim() بەکارهاتووە بۆ ئەوەی ئەگەر یوزەر بۆشایی (Space) لە کۆتایی کۆدەکە لێدابوو کێشە نەبێت
                         if (codeInput.trim() == CORRECT_CODE) { 
                             val prefs = context.getSharedPreferences("rebaz_tv_prefs", Context.MODE_PRIVATE)
                             prefs.edit().putBoolean("is_activated", true).apply()
@@ -220,8 +214,8 @@ fun ActivationScreen(onActivated: () -> Unit) {
                     },
                     modifier = Modifier
                         .weight(1.3f)
-                        .height(56.dp),
-                    shape = RoundedCornerShape(12.dp),
+                        .height(44.dp),
+                    shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                     contentPadding = PaddingValues()
                 ) {
@@ -235,7 +229,7 @@ fun ActivationScreen(onActivated: () -> Unit) {
                             ),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("چالاککردن", color = Color.Black, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                        Text("چالاککردن", color = Color.Black, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
