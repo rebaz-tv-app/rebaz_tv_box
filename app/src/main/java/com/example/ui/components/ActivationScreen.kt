@@ -32,7 +32,7 @@ fun ActivationScreen(onActivated: () -> Unit) {
     var isError by remember { mutableStateOf(false) }
 
     // لێرەدا کۆدە نهێنییەکە بنووسە کە دەتەوێت خەڵک پێی چالاک بکات
-    val CORRECT_CODE = "REBAZ2026" 
+    val CORRECT_CODE = "1122" 
 
     Box(
         modifier = Modifier
