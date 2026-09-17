@@ -78,7 +78,7 @@ fun ActivationScreen(onActivated: () -> Unit) {
 
             // تێکستی ڕوونکردنەوە
             Text(
-                text = "تکایە کۆدی چالاکبوون بنووسە بۆ چالاککردنی تەواوی ئەپەکە و بینینی هەموو کەناڵەکان.",
+                text = ".تکایە کۆدی چالاکبوون بنووسە بۆ چالاککردنی تەواوی ئەپەکە و بینینی هەموو کەناڵەکان . تێبینی: کۆدی ئەکتیڤکردن مانگی جارێک ئەگۆڕێت بۆ دەست گەیشتن بە کۆدی نوێ سەردانی چەناڵی تیلیگرامی REBAZ TV بکە لە تلیگرام https://t.me/rebaz_tv",
                 color = Color(0xFF9CA3AF),
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
@@ -128,7 +128,7 @@ fun ActivationScreen(onActivated: () -> Unit) {
                 Button(
                     onClick = {
                         // لێرەدا یوزەری تێلیگرامی خۆت دابنە
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/rebaz92"))
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/rebaz_tv"))
                         try {
                             context.startActivity(intent)
                         } catch (e: Exception) {
