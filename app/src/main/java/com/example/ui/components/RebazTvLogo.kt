@@ -45,30 +45,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-/**
- * High-fidelity logo component matching the uploaded REBAZ TV image:
- * - 3D metallic circular globe emblem with arrow, mountain peak & wi-fi symbol
- * - Bold metallic chrome "REBAZ" typography
- * - "TV" flanked by cyan and orange electrocardiogram/audio waveform pulse lines
- * - Automatically checks if a user-supplied 'rebaz_logo.png' is placed in res/drawable!
- */
 @Composable
 fun RebazTvLogo(
     modifier: Modifier = Modifier,
-    heightDp: Int = 42
+    heightDp: Int = 55 // لێرەدا قەبارەکەیمان گەورە کردووە بۆ 55 تا بە جوانی دەربکەوێت
 ) {
     val context = LocalContext.current
     val customDrawableId = remember {
-        val id1 = context.resources.getIdentifier("rebaz_logo", "drawable", context.packageName)
-        if (id1 != 0) id1 else context.resources.getIdentifier("ic_rebaz_logo", "drawable", context.packageName)
+        // سەرەتا بەدوای logo_wide دا دەگەڕێت
+        val id1 = context.resources.getIdentifier("logo_wide", "drawable", context.packageName)
+        if (id1 != 0) id1 else context.resources.getIdentifier("logo", "drawable", context.packageName)
     }
 
     if (customDrawableId != 0) {
         Image(
             painter = painterResource(id = customDrawableId),
             contentDescription = "REBAZ TV",
-            modifier = modifier.height(heightDp.dp),
-            contentScale = ContentScale.Fit
+            modifier = modifier
+                .height(heightDp.dp)
+                .padding(start = 4.dp), // کەمێک بۆشایی بۆ ئەوەی نەنوسێت بە لێوارەکەوە
+            contentScale = ContentScale.Fit // ئەمە وادەکات پانییەکەی بە شێوەیەکی ئۆتۆماتیکی و ڕێکخراو گەورە بێت
         )
     } else {
         RebazTvVectorLogo(
@@ -89,15 +85,12 @@ fun RebazTvVectorLogo(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy((8 * scale).dp)
     ) {
-        // Left: 3D Metallic circular globe emblem with arrow & network
         EmblemBadge(size = (42 * scale).dp)
 
-        // Right: "REBAZ" + "TV" with cyan & orange audio pulse lines
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // "REBAZ" in 3D metallic chrome lettering
             Text(
                 text = "REBAZ",
                 style = TextStyle(
@@ -118,13 +111,11 @@ fun RebazTvVectorLogo(
                 modifier = Modifier.offset(y = (2 * scale).dp)
             )
 
-            // Bottom line: Cyan Pulse ~ "TV" ~ Orange Pulse
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.offset(y = (-2 * scale).dp)
             ) {
-                // Left Cyan Pulse line
                 PulseWaveform(
                     color = Color(0xFF00E5FF),
                     isLeft = true,
@@ -135,7 +126,6 @@ fun RebazTvVectorLogo(
 
                 Spacer(modifier = Modifier.width((4 * scale).dp))
 
-                // "TV" in bold metallic chrome
                 Text(
                     text = "TV",
                     style = TextStyle(
@@ -156,7 +146,6 @@ fun RebazTvVectorLogo(
 
                 Spacer(modifier = Modifier.width((4 * scale).dp))
 
-                // Right Orange Pulse line
                 PulseWaveform(
                     color = Color(0xFFFF9100),
                     isLeft = false,
@@ -169,15 +158,6 @@ fun RebazTvVectorLogo(
     }
 }
 
-/**
- * 3D Metallic Emblem:
- * - Outer metallic chrome ring
- * - Cyan orbital ring overlay
- * - Glowing network globe with dots & connecting constellation lines
- * - Upward metallic chevron mountain
- * - High-speed cyan/blue 3D diagonal arrow
- * - Wi-Fi broadcast arc at top
- */
 @Composable
 private fun EmblemBadge(size: androidx.compose.ui.unit.Dp) {
     Box(
@@ -191,7 +171,6 @@ private fun EmblemBadge(size: androidx.compose.ui.unit.Dp) {
             val center = Offset(w / 2f, h / 2f)
             val radius = w / 2f - 3.dp.toPx()
 
-            // 1. Outer metallic bevel ring
             drawCircle(
                 brush = Brush.linearGradient(
                     colors = listOf(
@@ -208,7 +187,6 @@ private fun EmblemBadge(size: androidx.compose.ui.unit.Dp) {
                 center = center
             )
 
-            // 2. Dark blue inner globe
             drawCircle(
                 brush = Brush.radialGradient(
                     colors = listOf(
@@ -223,7 +201,6 @@ private fun EmblemBadge(size: androidx.compose.ui.unit.Dp) {
                 center = center
             )
 
-            // 3. Cyber constellation network dots & lines
             val nodes = listOf(
                 Offset(w * 0.35f, h * 0.35f),
                 Offset(w * 0.65f, h * 0.32f),
@@ -232,7 +209,6 @@ private fun EmblemBadge(size: androidx.compose.ui.unit.Dp) {
                 Offset(w * 0.50f, h * 0.50f)
             )
 
-            // Connect lines
             val linePaint = Color(0x6638BDF8)
             drawLine(linePaint, nodes[0], nodes[1], strokeWidth = 1.dp.toPx())
             drawLine(linePaint, nodes[0], nodes[4], strokeWidth = 1.dp.toPx())
@@ -241,13 +217,11 @@ private fun EmblemBadge(size: androidx.compose.ui.unit.Dp) {
             drawLine(linePaint, nodes[3], nodes[4], strokeWidth = 1.dp.toPx())
             drawLine(linePaint, nodes[2], nodes[3], strokeWidth = 1.dp.toPx())
 
-            // Glowing nodes
             for (node in nodes) {
                 drawCircle(Color(0xFF38BDF8), radius = 1.8.dp.toPx(), center = node)
                 drawCircle(Color.White, radius = 0.9.dp.toPx(), center = node)
             }
 
-            // 4. Stylized silver chevron / mountain peak inside
             val chevronPath = Path().apply {
                 moveTo(w * 0.25f, h * 0.72f)
                 lineTo(w * 0.42f, h * 0.48f)
@@ -262,24 +236,17 @@ private fun EmblemBadge(size: androidx.compose.ui.unit.Dp) {
                 )
             )
 
-            // 5. 3D Diagonal Vibrant Cyan Arrow shooting up-and-right
             val arrowPath = Path().apply {
-                // Shaft start at bottom left
                 moveTo(w * 0.22f, h * 0.76f)
                 lineTo(w * 0.62f, h * 0.34f)
-                // Arrowhead wing left
                 lineTo(w * 0.56f, h * 0.26f)
-                // Arrow tip
                 lineTo(w * 0.88f, h * 0.16f)
-                // Arrowhead wing right
                 lineTo(w * 0.78f, h * 0.48f)
-                // Back to shaft
                 lineTo(w * 0.70f, h * 0.42f)
                 lineTo(w * 0.30f, h * 0.84f)
                 close()
             }
 
-            // Arrow shadow/glow
             drawPath(
                 path = arrowPath,
                 brush = Brush.linearGradient(
@@ -294,7 +261,6 @@ private fun EmblemBadge(size: androidx.compose.ui.unit.Dp) {
                 )
             )
 
-            // 6. Orbital neon blue crescent on bottom-left
             drawArc(
                 brush = Brush.sweepGradient(
                     listOf(
@@ -312,7 +278,6 @@ private fun EmblemBadge(size: androidx.compose.ui.unit.Dp) {
                 style = Stroke(width = 3.dp.toPx(), cap = StrokeCap.Round)
             )
 
-            // 7. Wi-Fi wave arcs at top center
             val arcCenter = Offset(w * 0.50f, h * 0.24f)
             drawCircle(Color.White, radius = 1.2.dp.toPx(), center = arcCenter)
             drawArc(
@@ -337,11 +302,6 @@ private fun EmblemBadge(size: androidx.compose.ui.unit.Dp) {
     }
 }
 
-/**
- * Electrocardiogram / Audio Waveform Pulse line matching the logo:
- * - Left line: Electric Cyan (#00E5FF)
- * - Right line: Amber/Gold Orange (#FF9100)
- */
 @Composable
 private fun PulseWaveform(
     color: Color,
@@ -355,39 +315,26 @@ private fun PulseWaveform(
 
         val path = Path().apply {
             if (isLeft) {
-                // Starts as thin horizontal line from the left
                 moveTo(0f, midY)
                 lineTo(w * 0.35f, midY)
-                // Small dip down
                 lineTo(w * 0.42f, midY + h * 0.25f)
-                // Sharp spike up
                 lineTo(w * 0.55f, midY - h * 0.45f)
-                // Deep spike down
                 lineTo(w * 0.68f, midY + h * 0.45f)
-                // Return to baseline
                 lineTo(w * 0.80f, midY - h * 0.20f)
                 lineTo(w * 0.88f, midY)
-                // Connect to "TV"
                 lineTo(w, midY)
             } else {
-                // Starts from "TV"
                 moveTo(0f, midY)
                 lineTo(w * 0.12f, midY)
-                // Small spike
                 lineTo(w * 0.20f, midY - h * 0.20f)
-                // Deep spike down
                 lineTo(w * 0.32f, midY + h * 0.45f)
-                // Tall spike up
                 lineTo(w * 0.45f, midY - h * 0.45f)
-                // Small dip
                 lineTo(w * 0.58f, midY + h * 0.25f)
                 lineTo(w * 0.65f, midY)
-                // Extends as thin horizontal line to the right
                 lineTo(w, midY)
             }
         }
 
-        // Draw glowing outer stroke
         drawPath(
             path = path,
             color = color.copy(alpha = 0.4f),
@@ -398,7 +345,6 @@ private fun PulseWaveform(
             )
         )
 
-        // Draw crisp foreground stroke
         drawPath(
             path = path,
             brush = Brush.linearGradient(
