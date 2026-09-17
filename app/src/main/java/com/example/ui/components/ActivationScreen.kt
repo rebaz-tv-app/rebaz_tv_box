@@ -178,7 +178,7 @@ fun ActivationScreen(onActivated: () -> Unit) {
                         modifier = Modifier.fillMaxSize().background(Brush.horizontalGradient(colors = listOf(Color(0xFFFF9800), Color(0xFFFFC107)))),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("چالاککردن", color = Color.Black, fontSize.sp, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                        Text("چالاککردن", color = Color.Black, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
