@@ -9,6 +9,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import com.example.ui.RebazTvMainScreen
 import com.example.ui.TvViewModel
 import com.example.ui.theme.MyApplicationTheme
@@ -20,6 +22,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        
+        // ئەم بەشە نوێیە: بۆ شاردنەوەی شریتی سەرەوە و هێشتنەوەی دوگمەکانی خوارەوە
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            hide(WindowInsetsCompat.Type.statusBars())
+        }
+
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         setContent {
@@ -53,4 +61,3 @@ class MainActivity : ComponentActivity() {
         return super.onKeyDown(keyCode, event)
     }
 }
-
