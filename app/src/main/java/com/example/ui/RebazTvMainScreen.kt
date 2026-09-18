@@ -14,11 +14,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ui.components.BottomBar
@@ -52,6 +56,7 @@ fun RebazTvMainScreen(
     val currentCategory = categories.find { it.id == selectedCategoryId }
     val categoryName = currentCategory?.nameKurdish ?: "دۆکۆمێنتاری"
 
+    // دروستکردنی FocusRequester بۆ کۆنتڕۆڵکردنی ڕیموت
     val categoryFocusRequester = remember { FocusRequester() }
     val channelFocusRequester = remember { FocusRequester() }
 
@@ -131,7 +136,18 @@ fun RebazTvMainScreen(
                     LazyColumn(
                         modifier = Modifier
                             .weight(0.26f)
-                            .padding(horizontal = 4.dp),
+                            .padding(horizontal = 4.dp)
+                            .focusRequester(channelFocusRequester) // بەستنەوەی فۆکەس بە کەناڵەکانەوە
+                            .onPreviewKeyEvent { event ->
+                                // گەڕانەوە بۆ پۆلەکان بە دوگمەی چەپ
+                                if (event.nativeKeyEvent.action == KeyEvent.ACTION_DOWN &&
+                                    event.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+                                    try { categoryFocusRequester.requestFocus() } catch (e: Exception) {}
+                                    true
+                                } else {
+                                    false
+                                }
+                            },
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(channels, key = { it.id }) { channel ->
@@ -149,9 +165,25 @@ fun RebazTvMainScreen(
                     CategoryList(
                         categories = categories,
                         selectedCategoryId = selectedCategoryId,
-                        onCategoryClick = { viewModel.selectCategory(it) },
+                        onCategoryClick = {
+                            viewModel.selectCategory(it)
+                            // کاتێک OK لەسەر پۆلێک کرا، یەکسەر بچێتە سەر کەناڵەکان
+                            try { channelFocusRequester.requestFocus() } catch (e: Exception) {}
+                        },
                         onSearchCategoryClick = { viewModel.openSearch() },
-                        modifier = Modifier.weight(0.28f)
+                        modifier = Modifier
+                            .weight(0.28f)
+                            .focusRequester(categoryFocusRequester) // بەستنەوەی فۆکەس بە پۆلەکانەوە
+                            .onPreviewKeyEvent { event ->
+                                // چوون بۆ سەر کەناڵەکان بە دوگمەی ڕاست
+                                if (event.nativeKeyEvent.action == KeyEvent.ACTION_DOWN &&
+                                    event.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                                    try { channelFocusRequester.requestFocus() } catch (e: Exception) {}
+                                    true
+                                } else {
+                                    false
+                                }
+                            }
                     )
                 }
 
