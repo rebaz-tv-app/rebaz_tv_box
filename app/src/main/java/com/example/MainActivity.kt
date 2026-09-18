@@ -62,11 +62,13 @@ class MainActivity : ComponentActivity() {
                             .background(Color(0xFF080D1A)),
                         contentAlignment = Alignment.Center
                     ) {
-                           Image(
+                         Image(
                             painter = painterResource(id = R.drawable.splash),
                             contentDescription = "App Logo",
-                            modifier = Modifier.size(220.dp), // قەبارەیەکی مامناوەند و زۆر هاوسەنگ
-                            contentScale = ContentScale.Fit // بۆ ئەوەی هەموو لۆگۆکە بە جوانی و بێ بڕانەوە دەربکەوێت
+                            modifier = Modifier
+                                .fillMaxWidth(0.85f) // 85%ی پانی شاشە پڕ دەکاتەوە (نە زۆر بچووکە و نە زۆر گەورە)
+                                .aspectRatio(16f / 9f), // ڕێژەی 16:9ی ستاندارد
+                            contentScale = ContentScale.Fit // بۆ ئەوەی بە تەواوی و بێ بڕانەوە دەرکەوێت
                         )
 
 
