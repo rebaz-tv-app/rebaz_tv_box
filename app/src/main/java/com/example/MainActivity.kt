@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
                             painter = painterResource(id = R.drawable.splash),
                             contentDescription = "App Logo",
                             modifier = Modifier
-                                .fillMaxWidth(0.85f) // 85%ی پانی شاشە پڕ دەکاتەوە (نە زۆر بچووکە و نە زۆر گەورە)
+                                .fillMaxWidth(0.80f) // 85%ی پانی شاشە پڕ دەکاتەوە (نە زۆر بچووکە و نە زۆر گەورە)
                                 .aspectRatio(16f / 9f), // ڕێژەی 16:9ی ستاندارد
                             contentScale = ContentScale.Fit // بۆ ئەوەی بە تەواوی و بێ بڕانەوە دەرکەوێت
                         )
