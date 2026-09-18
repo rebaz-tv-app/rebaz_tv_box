@@ -26,6 +26,10 @@ import com.example.ui.TvViewModel
 import com.example.ui.components.ActivationScreen
 import com.example.ui.theme.MyApplicationTheme
 import kotlinx.coroutines.delay
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.aspectRatio
+
 
 class MainActivity : ComponentActivity() {
 
@@ -58,12 +62,15 @@ class MainActivity : ComponentActivity() {
                             .background(Color(0xFF080D1A)),
                         contentAlignment = Alignment.Center
                     ) {
-                        Image(
-                            // ناوی وێنەکە دەبێت splash بێت (بێ پیتە گەورە و خاڵ)
+                           Image(
                             painter = painterResource(id = R.drawable.splash),
                             contentDescription = "App Logo",
-                            modifier = Modifier.size(140.dp)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(16f / 9f), // ڕێژەی 16:9 ی ستاندارد بۆ فول شاشە
+                            contentScale = ContentScale.Crop // بۆ ئەوەی وێنەکە بە تەواوی شاشەکە پڕ بکاتەوە و جوان ببێت
                         )
+
                     }
                 } else {
                     val context = LocalContext.current
