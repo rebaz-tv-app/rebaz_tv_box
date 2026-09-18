@@ -52,6 +52,9 @@ fun RebazTvMainScreen(
     val currentCategory = categories.find { it.id == selectedCategoryId }
     val categoryName = currentCategory?.nameKurdish ?: "دۆکۆمێنتاری"
 
+    val categoryFocusRequester = remember { FocusRequester() }
+    val channelFocusRequester = remember { FocusRequester() }
+
     if (isFullscreen) {
         FullscreenPlayerView(
             player = viewModel.playerManager.getPlayer(),
