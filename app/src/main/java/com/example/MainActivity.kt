@@ -1,4 +1,4 @@
-package com.exampl
+package com.example
 
 import android.os.Bundle
 import android.content.Context
