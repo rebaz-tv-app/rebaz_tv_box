@@ -14,6 +14,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.DefaultLoadControl
+import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
@@ -92,12 +93,18 @@ class TvPlayerManager(private val context: Context) {
     }
 
     private fun initPlayer() {
+        // ⭐ چارەسەری کێشەی بێ دەنگی: بەکارهێنانی سۆفتوێر ئەگەر هاردوێری تیڤی شکستی هێنا لە دەنگەکە
+        val renderersFactory = DefaultRenderersFactory(context)
+            .setEnableDecoderFallback(true)
+
         val trackSelector = DefaultTrackSelector(context).apply {
             setParameters(
                 buildUponParameters()
                     .setForceHighestSupportedBitrate(true)
                     .setAllowVideoMixedMimeTypeAdaptiveness(true)
                     .setAllowVideoNonSeamlessAdaptiveness(true)
+                    .setAllowAudioMixedMimeTypeAdaptiveness(true)
+                    .setAllowAudioMixedSampleRateAdaptiveness(true)
             )
         }
 
@@ -120,6 +127,7 @@ class TvPlayerManager(private val context: Context) {
         val mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
 
         exoPlayer = ExoPlayer.Builder(context)
+            .setRenderersFactory(renderersFactory) // ⭐ خستنەگەڕی سیستەمی خوێندنەوەی دەنگەکە
             .setTrackSelector(trackSelector)
             .setLoadControl(loadControl)
             .setMediaSourceFactory(mediaSourceFactory)
