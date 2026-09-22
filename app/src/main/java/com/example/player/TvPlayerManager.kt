@@ -42,25 +42,19 @@ class TvPlayerManager(private val context: Context) {
 
     // سیستەمی زیرەک بۆ دووبارە هەوڵدانەوە کاتێک پەخش دەپچڕێت
     private var retryCount = 0
-    private val maxRetries = 5 // ٥ جار هەوڵ دەدات پێش ئەوەی شاشە سوورەکە پیشان بدات
+    private val maxRetries = 3 // کەممان کردەوە بۆ ٣ جار تا زووتر بزانێت ئەگەر لینکەکە مردووە
 
     private val playerListener = object : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: Int) {
             when (playbackState) {
                 Player.STATE_BUFFERING -> _playbackState.value = PlaybackUiState.Buffering
                 Player.STATE_READY -> {
-                    retryCount = 0 // ئەگەر پەخشەکە سەرکەوتوو بوو، ژمارەی هەوڵەکان سفر دەکرێتەوە
+                    retryCount = 0 
                     _playbackState.value = PlaybackUiState.Playing
                 }
-                Player.STATE_ENDED -> {
-                    attemptRetry() // لەجیاتی وەستان، هەوڵی پێکردنەوە دەدات
-                }
+                Player.STATE_ENDED -> attemptRetry()
                 Player.STATE_IDLE -> {
-                    if (exoPlayer?.playerError != null) {
-                        attemptRetry()
-                    } else {
-                        _playbackState.value = PlaybackUiState.Idle
-                    }
+                    if (exoPlayer?.playerError != null) attemptRetry()
                 }
             }
         }
@@ -74,7 +68,6 @@ class TvPlayerManager(private val context: Context) {
                 retryCount++
                 _playbackState.value = PlaybackUiState.Buffering
                 
-                // دوای ٢ چرکە هەوڵی پێکردنەوەی کەناڵەکە دەداتەوە بێ ئەوەی بەکارهێنەر بێزار بکات
                 Handler(Looper.getMainLooper()).postDelayed({
                     _currentStreamUrl.value?.let {
                         exoPlayer?.setMediaItem(MediaItem.fromUri(it))
@@ -84,6 +77,9 @@ class TvPlayerManager(private val context: Context) {
                 }, 2000)
             } else {
                 _playbackState.value = PlaybackUiState.Error("پەخشی ئەم کەناڵە لە ئێستادا کارا نیە")
+                // گرنگ: وەستاندنی پلەیەرەکە کاتێک هەڵە ڕوودەدات تا ئامادە بێت بۆ کەناڵێکی تر
+                exoPlayer?.stop()
+                exoPlayer?.clearMediaItems()
             }
         }
     }
@@ -105,21 +101,19 @@ class TvPlayerManager(private val context: Context) {
             )
         }
 
-        // خەزنکردنێکی زۆر گەورەتر بۆ ئەوەی زوو نەوەستێت
         val loadControl = DefaultLoadControl.Builder()
             .setBufferDurationsMs(
-                32_000, // کەمترین ٣٢ چرکە خەزن دەکات
-                65_536, // زۆرترین ٦٥ چرکە
+                32_000, 
+                65_536, 
                 2500,
                 5000
             )
             .build()
 
-        // ناسنامەی ساختە (فێڵ)، تا سێرڤەرەکە وا بزانێت لەسەر وێبگەڕی کۆمپیوتەری ویندۆزە
         val httpDataSourceFactory = DefaultHttpDataSource.Factory()
             .setAllowCrossProtocolRedirects(true)
-            .setConnectTimeoutMs(20_000)
-            .setReadTimeoutMs(20_000)
+            .setConnectTimeoutMs(8_000) // ⏳ گرنگ: کەمکرایەوە بۆ ٨ چرکە
+            .setReadTimeoutMs(8_000)    // ⏳ گرنگ: کەمکرایەوە بۆ ٨ چرکە
             .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
 
         val dataSourceFactory = DefaultDataSource.Factory(context, httpDataSourceFactory)
@@ -146,17 +140,22 @@ class TvPlayerManager(private val context: Context) {
     }
 
     fun playStream(url: String) {
-        retryCount = 0 // کاتێک کەناڵ دەگۆڕێت با ژمارەی هەوڵەکان سفر ببێتەوە
+        retryCount = 0 
         val player = getPlayer()
+        
+        // ⭐ گرنگ: پاککردنەوەی تەواوەتی پێش خستنەسەری کەناڵی نوێ
+        player.stop()
+        player.clearMediaItems()
+
         if (url.isBlank()) {
             _currentStreamUrl.value = null
             _playbackState.value = PlaybackUiState.Error("پەخشی ئەم کەناڵە لە ئێستادا کارا نیە")
-            player.stop()
             return
         }
         if (_currentStreamUrl.value == url && player.isPlaying) {
             return
         }
+        
         _currentStreamUrl.value = url
         _playbackState.value = PlaybackUiState.Buffering
 
