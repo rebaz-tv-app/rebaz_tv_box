@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import androidx.compose.foundation.Image // زیادکرا بۆ لۆگۆکە
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,7 +20,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Fullscreen
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.TvOff
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -32,12 +32,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource // زیادکرا بۆ هێنانی وێنەکان
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.exoplayer.ExoPlayer
+import com.example.R // زیادکرا بۆ ناسینەوەی فۆڵدەری drawable
 import com.example.data.model.Channel
 import com.example.player.PlaybackUiState
 
@@ -50,6 +52,17 @@ fun PreviewPlayerBox(
     onDoubleClickToFullscreen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // دەستنیشانکردنی وێنەکە بەپێی ناوی کەناڵەکە
+    val logoResId = when (currentChannel?.name) {
+        "Rebaz Sport 1" -> R.drawable.rebaz_sport_1
+        "Rebaz Sport 2" -> R.drawable.rebaz_sport_2
+        "Rebaz Sport 3" -> R.drawable.rebaz_sport_3
+        "Rebaz Sport 4" -> R.drawable.rebaz_sport_4
+        "Rebaz Sport 5" -> R.drawable.rebaz_sport_5
+        "Rebaz WWE" -> R.drawable.rebaz_wwe
+        else -> null
+    }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -127,7 +140,7 @@ fun PreviewPlayerBox(
                 }
             }
 
-            // Top Live status badge (only when playing)
+            // Top Live status badge (Moved to TopStart to avoid logo overlap)
             if (playbackState is PlaybackUiState.Playing) {
                 Box(
                     modifier = Modifier
@@ -137,7 +150,7 @@ fun PreviewPlayerBox(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .align(Alignment.TopEnd)
+                            .align(Alignment.TopStart) // گۆڕدرا بۆ لای چەپ
                             .clip(RoundedCornerShape(4.dp))
                             .background(Color(0x99000000))
                             .padding(horizontal = 6.dp, vertical = 2.dp)
@@ -157,9 +170,24 @@ fun PreviewPlayerBox(
                         )
                     }
                 }
+                
+                // ⭐ زیادکردنی لۆگۆی تایبەتی کەناڵەکە (Watermark) بۆ سەرەوە لای ڕاست
+                if (logoResId != null) {
+                    Image(
+                        painter = painterResource(id = logoResId),
+                        contentDescription = "Channel Logo",
+                        modifier = Modifier
+                            .align(Alignment.TopEnd) // گۆشەی سەرەوە لای ڕاست
+                            // ئەم بۆشاییانە وا دەکەن لۆگۆکە کەمێک بێتە خوارەوە و ڕاست بۆ داپۆشینی لۆگۆی ئەسڵی
+                            .padding(top = 10.dp, end = 25.dp) 
+                            // قەبارەی لۆگۆکە بۆ شاشەی پریڤیو (دەتوانیت لێرەوە گەورە و بچووکی بکەیت)
+                            .width(85.dp) 
+                            .height(35.dp) 
+                    )
+                }
             }
 
-            // Bottom Ticker Overlay (matching screenshot Kurdish news text + clock)
+            // Bottom Ticker Overlay
             if (playbackState !is PlaybackUiState.Error) {
                 Box(
                     modifier = Modifier
@@ -177,7 +205,6 @@ fun PreviewPlayerBox(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Kurdish News/Documentary Ticker
                         Text(
                             text = currentChannel?.subtitle
                                 ?: "ئاگاداری دڵیاکی و میواندۆستییە، بەڵام تەنها کاتێک بێکەرەوە کە زستان تەواو بوو. کاک محەمەد",
@@ -191,7 +218,6 @@ fun PreviewPlayerBox(
 
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        // Clock matching screenshot "04:27:31 EBL"
                         Text(
                             text = currentTimeString.ifBlank { "04:27:31 EBL" },
                             color = Color.White,
@@ -205,7 +231,6 @@ fun PreviewPlayerBox(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Channel Name Under Preview Player matching screenshot "Shna Documentary"
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -225,7 +250,6 @@ fun PreviewPlayerBox(
                 )
             }
 
-            // Quick Fullscreen Icon button for convenience
             IconButton(
                 onClick = onDoubleClickToFullscreen,
                 modifier = Modifier
