@@ -5,6 +5,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image // زیادکرا بۆ لۆگۆکە
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -51,10 +52,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource // زیادکرا
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.exoplayer.ExoPlayer
+import com.example.R // زیادکرا بۆ وێنەکان
 import com.example.data.model.Channel
 import com.example.player.PlaybackUiState
 import kotlinx.coroutines.delay
@@ -73,6 +76,17 @@ fun FullscreenPlayerView(
     onTriggerOsd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // دەستنیشانکردنی وێنەکە بەپێی ناوی کەناڵەکە بۆ دۆخی فول سکرین
+    val logoResId = when (channel?.name) {
+        "Rebaz Sport 1" -> R.drawable.rebaz_sport_1
+        "Rebaz Sport 2" -> R.drawable.rebaz_sport_2
+        "Rebaz Sport 3" -> R.drawable.rebaz_sport_3
+        "Rebaz Sport 4" -> R.drawable.rebaz_sport_4
+        "Rebaz Sport 5" -> R.drawable.rebaz_sport_5
+        "Rebaz WWE" -> R.drawable.rebaz_wwe
+        else -> null
+    }
+
     // Intercept hardware/remote Back button to return to preview
     BackHandler {
         onBackToPreview()
@@ -103,7 +117,6 @@ fun FullscreenPlayerView(
             .focusRequester(focusRequester)
             .focusable()
             .onKeyEvent { keyEvent ->
-                // کاتێک بە کۆنتڕۆڵ یان کیبۆرد دوگمەیەک دادەگیرێت، با کۆنتڕۆڵەکان دەربکەون
                 showControls = true
                 resetTimer++
                 
@@ -133,7 +146,6 @@ fun FullscreenPlayerView(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ) {
-                // کاتێک پەنجە دەدەیت لە شاشەکە کۆنتڕۆڵەکان دەردەکەون یان دەشارێنەوە
                 onTriggerOsd()
                 showControls = !showControls
                 if (showControls) resetTimer++
@@ -145,6 +157,21 @@ fun FullscreenPlayerView(
             player = player,
             modifier = Modifier.fillMaxSize()
         )
+
+        // ⭐ لۆگۆی تایبەتی کەناڵەکە بۆ دۆخی تەواوی شاشە (Fullscreen)
+        if (playbackState is PlaybackUiState.Playing && logoResId != null) {
+            Image(
+                painter = painterResource(id = logoResId),
+                contentDescription = "Channel Logo Fullscreen",
+                modifier = Modifier
+                    .align(Alignment.TopEnd) // گۆشەی سەرەوە لای ڕاست
+                    // بۆشایی زیاتر بۆ شاشەی گەورە (لە سەرەوە و ڕاستەوە)
+                    .padding(top = 25.dp, end = 45.dp) 
+                    // قەبارەی گەورەتر بۆ ئەوەی لەسەر تیڤی بە ڕوونی دەربکەوێت و لۆگۆکە بشارێتەوە
+                    .width(140.dp) 
+                    .height(55.dp) 
+            )
+        }
 
         // Buffering Spinner
         if (playbackState is PlaybackUiState.Buffering) {
@@ -196,7 +223,7 @@ fun FullscreenPlayerView(
             }
         }
 
-        // On-Screen TV Navigation Arrows (Up / Down) for easy switching via touch or mouse
+        // On-Screen TV Navigation Arrows (Up / Down)
         AnimatedVisibility(
             visible = showControls,
             enter = fadeIn(),
@@ -212,7 +239,6 @@ fun FullscreenPlayerView(
                 IconButton(
                     onClick = {
                         onChannelUp()
-                        // کاتێک کلیک کرا، کاتژمێرەکە نوێ دەبێتەوە بۆ ئەوەی خێرا دیار نەمێنێت
                         showControls = true
                         resetTimer++
                     },
@@ -233,7 +259,6 @@ fun FullscreenPlayerView(
                 IconButton(
                     onClick = {
                         onChannelDown()
-                        // کاتێک کلیک کرا، کاتژمێرەکە نوێ دەبێتەوە بۆ ئەوەی خێرا دیار نەمێنێت
                         showControls = true
                         resetTimer++
                     },
@@ -253,12 +278,12 @@ fun FullscreenPlayerView(
             }
         }
 
-        // Top Back Button in Fullscreen
+        // Top Back Button in Fullscreen (Adjusted to avoid overlap with Logo)
         AnimatedVisibility(
             visible = showOsd,
             enter = fadeIn(),
             exit = fadeOut(),
-            modifier = Modifier.align(Alignment.TopStart)
+            modifier = Modifier.align(Alignment.TopStart) // هێشتنەوەی لە لای چەپ بۆ ئەوەی بەر لۆگۆکە نەکەوێت
         ) {
             Row(
                 modifier = Modifier
@@ -297,16 +322,18 @@ fun FullscreenPlayerView(
                     )
                 }
 
+                // Ticker / Info text in top center/right
                 Text(
                     text = "REBAZ TV • دۆخی تەواوی شاشە",
                     color = Color(0xFF93C5FD),
                     fontSize = 13.sp,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(end = 150.dp) // بۆشایی پێدراوە بۆ ئەوەی نەچێتە ژێر لۆگۆکە
                 )
             }
         }
 
-        // Bottom OSD (On-Screen Display) banner when switching channels
+        // Bottom OSD (On-Screen Display)
         AnimatedVisibility(
             visible = showOsd,
             enter = fadeIn(),
@@ -333,8 +360,6 @@ fun FullscreenPlayerView(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
-                        
-
                         Column {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
@@ -344,7 +369,6 @@ fun FullscreenPlayerView(
                                     fontWeight = FontWeight.Bold
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
-                                // Category badge
                                 Box(
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(4.dp))
@@ -370,7 +394,7 @@ fun FullscreenPlayerView(
                         }
                     }
 
-                    // Action buttons on right (Favorite toggle, exit fullscreen)
+                    // Action buttons on right
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
