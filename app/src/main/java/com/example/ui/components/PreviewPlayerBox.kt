@@ -168,16 +168,16 @@ fun PreviewPlayerBox(
                 }
             }
 
-            // لۆگۆکە هەمیشە دەردەکەوێت و سەد لە سەد دەچێتە لای ڕاست
+            // ⭐ گۆڕانکارییەکان بۆ بچووککردنەوە، بەرزکردنەوە و بردنە لای چەپ لە شاشەی پریڤیو
             if (logoResId != null) {
                 Image(
                     painter = painterResource(id = logoResId),
                     contentDescription = "Channel Logo",
                     modifier = Modifier
                         .align(AbsoluteAlignment.TopRight)
-                        .absolutePadding(top = 10.dp, right = 25.dp)
-                        .width(85.dp)
-                        .height(35.dp)
+                        .absolutePadding(top = 5.dp, right = 35.dp) // کەمتر چووەتە خوارەوە (5) و زیاتر چووەتە چەپ (35)
+                        .width(75.dp) // بچووکتر کرایەوە
+                        .height(30.dp) // بچووکتر کرایەوە
                 )
             }
 
