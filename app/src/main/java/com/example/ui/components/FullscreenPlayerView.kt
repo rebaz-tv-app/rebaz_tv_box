@@ -5,7 +5,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image // زیادکرا بۆ لۆگۆکە
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -52,12 +53,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource // زیادکرا
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.exoplayer.ExoPlayer
-import com.example.R // زیادکرا بۆ وێنەکان
+import com.example.R
 import com.example.data.model.Channel
 import com.example.player.PlaybackUiState
 import kotlinx.coroutines.delay
@@ -76,7 +77,6 @@ fun FullscreenPlayerView(
     onTriggerOsd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // دەستنیشانکردنی وێنەکە بەپێی ناوی کەناڵەکە بۆ دۆخی فول سکرین
     val logoResId = when (channel?.name) {
         "Rebaz Sport 1" -> R.drawable.rebaz_sport_1
         "Rebaz Sport 2" -> R.drawable.rebaz_sport_2
@@ -87,18 +87,14 @@ fun FullscreenPlayerView(
         else -> null
     }
 
-    // Intercept hardware/remote Back button to return to preview
     BackHandler {
         onBackToPreview()
     }
 
     val focusRequester = remember { FocusRequester() }
-
-    // گۆڕاوەکان بۆ کۆنتڕۆڵکردنی کاتژمێری شاردنەوەی دوگمەکان
     var showControls by remember { mutableStateOf(true) }
     var resetTimer by remember { mutableIntStateOf(0) }
 
-    // کاتژمێری خۆکار بۆ شاردنەوەی دوگمەکانی سەر شاشە دوای ٤ چرکە
     LaunchedEffect(showControls, resetTimer) {
         if (showControls) {
             delay(4000)
@@ -152,28 +148,24 @@ fun FullscreenPlayerView(
             }
             .testTag("fullscreen_player_view")
     ) {
-        // 100% Fullscreen Video Player Surface
         VideoPlayerSurface(
             player = player,
             modifier = Modifier.fillMaxSize()
         )
 
-        // ⭐ لۆگۆی تایبەتی کەناڵەکە بۆ دۆخی تەواوی شاشە (Fullscreen)
-        if (playbackState is PlaybackUiState.Playing && logoResId != null) {
+        // ⭐ لۆگۆکە هەمیشە دیارە کاتێک ناوی کەناڵەکە هەبێت، بێ گوێدانە وەستان و پەخش
+        if (logoResId != null) {
             Image(
                 painter = painterResource(id = logoResId),
                 contentDescription = "Channel Logo Fullscreen",
                 modifier = Modifier
-                    .align(Alignment.TopEnd) // گۆشەی سەرەوە لای ڕاست
-                    // بۆشایی زیاتر بۆ شاشەی گەورە (لە سەرەوە و ڕاستەوە)
-                    .padding(top = 25.dp, end = 45.dp) 
-                    // قەبارەی گەورەتر بۆ ئەوەی لەسەر تیڤی بە ڕوونی دەربکەوێت و لۆگۆکە بشارێتەوە
-                    .width(140.dp) 
-                    .height(55.dp) 
+                    .align(Alignment.TopRight)
+                    .absolutePadding(top = 25.dp, right = 45.dp)
+                    .width(140.dp)
+                    .height(55.dp)
             )
         }
 
-        // Buffering Spinner
         if (playbackState is PlaybackUiState.Buffering) {
             Box(
                 modifier = Modifier
@@ -189,7 +181,6 @@ fun FullscreenPlayerView(
             }
         }
 
-        // Inactive / Error Stream Overlay
         if (playbackState is PlaybackUiState.Error) {
             Box(
                 modifier = Modifier
@@ -223,7 +214,6 @@ fun FullscreenPlayerView(
             }
         }
 
-        // On-Screen TV Navigation Arrows (Up / Down)
         AnimatedVisibility(
             visible = showControls,
             enter = fadeIn(),
@@ -278,12 +268,11 @@ fun FullscreenPlayerView(
             }
         }
 
-        // Top Back Button in Fullscreen (Adjusted to avoid overlap with Logo)
         AnimatedVisibility(
             visible = showOsd,
             enter = fadeIn(),
             exit = fadeOut(),
-            modifier = Modifier.align(Alignment.TopStart) // هێشتنەوەی لە لای چەپ بۆ ئەوەی بەر لۆگۆکە نەکەوێت
+            modifier = Modifier.align(Alignment.TopStart) 
         ) {
             Row(
                 modifier = Modifier
@@ -322,18 +311,16 @@ fun FullscreenPlayerView(
                     )
                 }
 
-                // Ticker / Info text in top center/right
                 Text(
                     text = "REBAZ TV • دۆخی تەواوی شاشە",
                     color = Color(0xFF93C5FD),
                     fontSize = 13.sp,
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.padding(end = 150.dp) // بۆشایی پێدراوە بۆ ئەوەی نەچێتە ژێر لۆگۆکە
+                    modifier = Modifier.padding(end = 150.dp) 
                 )
             }
         }
 
-        // Bottom OSD (On-Screen Display)
         AnimatedVisibility(
             visible = showOsd,
             enter = fadeIn(),
@@ -355,7 +342,6 @@ fun FullscreenPlayerView(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Channel Info on left
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(14.dp)
@@ -394,7 +380,6 @@ fun FullscreenPlayerView(
                         }
                     }
 
-                    // Action buttons on right
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
