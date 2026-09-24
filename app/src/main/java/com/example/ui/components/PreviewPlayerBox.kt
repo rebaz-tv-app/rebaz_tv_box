@@ -177,7 +177,7 @@ fun PreviewPlayerBox(
                     modifier = Modifier
                         .align(AbsoluteAlignment.TopRight)
                         .absolutePadding(top = 4.dp, right = 14.dp) // ژمارەکە کەمکرایەوە تا بچێتە ڕاست
-                        .width(55.dp) 
+                        .width(60.dp) 
                         .height(26.dp)
                 )
             }
