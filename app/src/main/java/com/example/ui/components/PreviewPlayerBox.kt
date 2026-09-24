@@ -157,13 +157,6 @@ fun PreviewPlayerBox(
                                 .clip(CircleShape)
                                 .background(Color(0xFF22C55E))
                         )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = "",
-                            color = Color(0xFFE2E8F0),
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Bold
-                        )
                     }
                 }
             }
@@ -176,9 +169,9 @@ fun PreviewPlayerBox(
                     contentDescription = "Channel Logo",
                     modifier = Modifier
                         .align(AbsoluteAlignment.TopRight)
-                        .absolutePadding(top = 4.dp, right = 14.dp) // ژمارەکە کەمکرایەوە تا بچێتە ڕاست
-                        .width(60.dp) 
-                        .height(40.dp)
+                        .absolutePadding(top = 3.dp, right = 12.dp) // ژمارەکە کەمکرایەوە تا بچێتە ڕاست
+                        .width(65.dp) 
+                        .height(30.dp)
                 )
             }
 
