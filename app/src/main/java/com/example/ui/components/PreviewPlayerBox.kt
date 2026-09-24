@@ -1,6 +1,6 @@
 package com.example.ui.components
 
-import androidx.compose.foundation.Image // زیادکرا بۆ لۆگۆکە
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,14 +33,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource // زیادکرا بۆ هێنانی وێنەکان
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.exoplayer.ExoPlayer
-import com.example.R // زیادکرا بۆ ناسینەوەی فۆڵدەری drawable
+import com.example.R
 import com.example.data.model.Channel
 import com.example.player.PlaybackUiState
 
@@ -52,7 +53,6 @@ fun PreviewPlayerBox(
     onDoubleClickToFullscreen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // دەستنیشانکردنی وێنەکە بەپێی ناوی کەناڵەکە
     val logoResId = when (currentChannel?.name) {
         "Rebaz Sport 1" -> R.drawable.rebaz_sport_1
         "Rebaz Sport 2" -> R.drawable.rebaz_sport_2
@@ -69,7 +69,6 @@ fun PreviewPlayerBox(
             .padding(start = 24.dp, end = 12.dp),
         horizontalAlignment = Alignment.Start
     ) {
-        // Video Preview Container with 16:9 Aspect Ratio
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -80,13 +79,11 @@ fun PreviewPlayerBox(
                 .clickable { onDoubleClickToFullscreen() }
                 .testTag("preview_player_box")
         ) {
-            // Live Video Surface
             VideoPlayerSurface(
                 player = player,
                 modifier = Modifier.fillMaxSize()
             )
 
-            // Buffering / Loading Indicator
             if (playbackState is PlaybackUiState.Buffering) {
                 Box(
                     modifier = Modifier
@@ -102,7 +99,6 @@ fun PreviewPlayerBox(
                 }
             }
 
-            // Inactive / Error Stream Overlay
             if (playbackState is PlaybackUiState.Error) {
                 Box(
                     modifier = Modifier
@@ -140,7 +136,6 @@ fun PreviewPlayerBox(
                 }
             }
 
-            // Top Live status badge (Moved to TopStart to avoid logo overlap)
             if (playbackState is PlaybackUiState.Playing) {
                 Box(
                     modifier = Modifier
@@ -150,7 +145,7 @@ fun PreviewPlayerBox(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .align(Alignment.TopStart) // گۆڕدرا بۆ لای چەپ
+                            .align(Alignment.TopStart) 
                             .clip(RoundedCornerShape(4.dp))
                             .background(Color(0x99000000))
                             .padding(horizontal = 6.dp, vertical = 2.dp)
@@ -170,24 +165,21 @@ fun PreviewPlayerBox(
                         )
                     }
                 }
-                
-                // ⭐ زیادکردنی لۆگۆی تایبەتی کەناڵەکە (Watermark) بۆ سەرەوە لای ڕاست
-                if (logoResId != null) {
-                    Image(
-                        painter = painterResource(id = logoResId),
-                        contentDescription = "Channel Logo",
-                        modifier = Modifier
-                            .align(Alignment.TopEnd) // گۆشەی سەرەوە لای ڕاست
-                            // ئەم بۆشاییانە وا دەکەن لۆگۆکە کەمێک بێتە خوارەوە و ڕاست بۆ داپۆشینی لۆگۆی ئەسڵی
-                            .padding(top = 10.dp, end = 25.dp) 
-                            // قەبارەی لۆگۆکە بۆ شاشەی پریڤیو (دەتوانیت لێرەوە گەورە و بچووکی بکەیت)
-                            .width(85.dp) 
-                            .height(35.dp) 
-                    )
-                }
             }
 
-            // Bottom Ticker Overlay
+            // ⭐ لۆگۆکە هەمیشە دەردەکەوێت و سەد لە سەد دەچێتە لای ڕاست
+            if (logoResId != null) {
+                Image(
+                    painter = painterResource(id = logoResId),
+                    contentDescription = "Channel Logo",
+                    modifier = Modifier
+                        .align(Alignment.TopRight)
+                        .absolutePadding(top = 10.dp, right = 25.dp)
+                        .width(85.dp)
+                        .height(35.dp)
+                )
+            }
+
             if (playbackState !is PlaybackUiState.Error) {
                 Box(
                     modifier = Modifier
