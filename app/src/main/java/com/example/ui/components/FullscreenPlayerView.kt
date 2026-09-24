@@ -56,6 +56,7 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign // ⭐ ئەمە زیادکرا بۆ چارەسەری کێشەکە
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.exoplayer.ExoPlayer
@@ -154,16 +155,15 @@ fun FullscreenPlayerView(
             modifier = Modifier.fillMaxSize()
         )
 
-        // ⭐ گۆڕانکارییەکان بۆ بچووککردنەوە، بەرزکردنەوە و بردنە لای چەپ لە شاشەی پڕ (Fullscreen)
         if (logoResId != null) {
             Image(
                 painter = painterResource(id = logoResId),
                 contentDescription = "Channel Logo Fullscreen",
                 modifier = Modifier
                     .align(AbsoluteAlignment.TopRight)
-                    .absolutePadding(top = 15.dp, right = 60.dp) // کەمتر چووەتە خوارەوە (15) و زیاتر چووەتە چەپ (60)
-                    .width(120.dp) // بچووکتر کرایەوە لە 140ـەوە بۆ 120
-                    .height(45.dp) // بچووکتر کرایەوە لە 55ـەوە بۆ 45
+                    .absolutePadding(top = 15.dp, right = 60.dp)
+                    .width(120.dp)
+                    .height(45.dp)
             )
         }
 
