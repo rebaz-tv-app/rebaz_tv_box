@@ -154,15 +154,16 @@ fun FullscreenPlayerView(
             modifier = Modifier.fillMaxSize()
         )
 
+        // ⭐ گۆڕانکارییەکان بۆ بچووککردنەوە، بەرزکردنەوە و بردنە لای چەپ لە شاشەی پڕ (Fullscreen)
         if (logoResId != null) {
             Image(
                 painter = painterResource(id = logoResId),
                 contentDescription = "Channel Logo Fullscreen",
                 modifier = Modifier
                     .align(AbsoluteAlignment.TopRight)
-                    .absolutePadding(top = 25.dp, right = 45.dp)
-                    .width(140.dp)
-                    .height(55.dp)
+                    .absolutePadding(top = 15.dp, right = 60.dp) // کەمتر چووەتە خوارەوە (15) و زیاتر چووەتە چەپ (60)
+                    .width(120.dp) // بچووکتر کرایەوە لە 140ـەوە بۆ 120
+                    .height(45.dp) // بچووکتر کرایەوە لە 55ـەوە بۆ 45
             )
         }
 
@@ -208,7 +209,7 @@ fun FullscreenPlayerView(
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        textAlign = TextAlign.Center
                     )
                 }
             }
