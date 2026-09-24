@@ -159,7 +159,7 @@ fun PreviewPlayerBox(
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "LIVE HD",
+                            text = "",
                             color = Color(0xFFE2E8F0),
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold
@@ -178,7 +178,7 @@ fun PreviewPlayerBox(
                         .align(AbsoluteAlignment.TopRight)
                         .absolutePadding(top = 4.dp, right = 14.dp) // ژمارەکە کەمکرایەوە تا بچێتە ڕاست
                         .width(60.dp) 
-                        .height(30.dp)
+                        .height(40.dp)
                 )
             }
 
