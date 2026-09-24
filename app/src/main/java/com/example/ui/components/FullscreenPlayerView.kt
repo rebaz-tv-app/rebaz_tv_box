@@ -44,6 +44,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -153,13 +154,12 @@ fun FullscreenPlayerView(
             modifier = Modifier.fillMaxSize()
         )
 
-        // ⭐ لۆگۆکە هەمیشە دیارە کاتێک ناوی کەناڵەکە هەبێت، بێ گوێدانە وەستان و پەخش
         if (logoResId != null) {
             Image(
                 painter = painterResource(id = logoResId),
                 contentDescription = "Channel Logo Fullscreen",
                 modifier = Modifier
-                    .align(Alignment.TopRight)
+                    .align(AbsoluteAlignment.TopRight)
                     .absolutePadding(top = 25.dp, right = 45.dp)
                     .width(140.dp)
                     .height(55.dp)
