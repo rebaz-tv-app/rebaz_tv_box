@@ -168,6 +168,7 @@ fun PreviewPlayerBox(
                 }
             }
 
+            // لۆگۆکە هەمیشە دەردەکەوێت و سەد لە سەد دەچێتە لای ڕاست
             if (logoResId != null) {
                 Image(
                     painter = painterResource(id = logoResId),
