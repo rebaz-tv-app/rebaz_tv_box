@@ -155,17 +155,19 @@ fun FullscreenPlayerView(
             modifier = Modifier.fillMaxSize()
         )
 
+                // ⭐ شاشەی فول سکرین: بچووکتر کرا و کەمێک برا بۆ لای چەپ
         if (logoResId != null) {
             Image(
                 painter = painterResource(id = logoResId),
                 contentDescription = "Channel Logo Fullscreen",
                 modifier = Modifier
                     .align(AbsoluteAlignment.TopRight)
-                    .absolutePadding(top = 15.dp, right = 60.dp)
-                    .width(120.dp)
-                    .height(45.dp)
+                    .absolutePadding(top = 15.dp, right = 85.dp) // ژمارەکە زیادکرا تا بچێتە چەپ
+                    .width(105.dp) 
+                    .height(40.dp)
             )
         }
+
 
         if (playbackState is PlaybackUiState.Buffering) {
             Box(
