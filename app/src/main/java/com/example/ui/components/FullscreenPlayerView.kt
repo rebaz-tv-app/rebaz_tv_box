@@ -89,23 +89,23 @@ fun FullscreenPlayerView(
     when (channel?.name) {
         "Rebaz Sport 1" -> {
             logoResId = R.drawable.rebaz_sport_1
-            logoWidth = 95.dp
-            logoHeight = 20.dp
+            logoWidth = 100.dp
+            logoHeight = 30.dp
             logoTop = 15.dp
             logoRight = 125.dp
         }
         "Rebaz Sport 2" -> {
             logoResId = R.drawable.rebaz_sport_2
-            logoWidth = 95.dp
-            logoHeight = 20.dp
+            logoWidth = 100.dp
+            logoHeight = 30.dp
             logoTop = 15.dp
             logoRight = 125.dp
         }
         "Rebaz Sport 3" -> {
             logoResId = R.drawable.rebaz_sport_3
             // ئیتر دەتوانیت لێرەدا پێوانەی تایبەت بە کەناڵی 3 دابنێیت بۆ فول سکرین
-            logoWidth = 95.dp
-            logoHeight = 20.dp
+            logoWidth = 100.dp
+            logoHeight = 30.dp
             logoTop = 15.dp
             logoRight = 125.dp
         }
