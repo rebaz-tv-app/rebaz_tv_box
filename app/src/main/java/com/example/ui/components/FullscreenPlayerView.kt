@@ -90,45 +90,45 @@ fun FullscreenPlayerView(
         "Rebaz Sport 1" -> {
             logoResId = R.drawable.rebaz_sport_1
             logoWidth = 100.dp
-            logoHeight = 30.dp
+            logoHeight = 27.dp
             logoTop = 15.dp
-            logoRight = 125.dp
+            logoRight = 120.dp
         }
         "Rebaz Sport 2" -> {
             logoResId = R.drawable.rebaz_sport_2
             logoWidth = 100.dp
-            logoHeight = 30.dp
+            logoHeight = 27.dp
             logoTop = 15.dp
-            logoRight = 125.dp
+            logoRight = 120.dp
         }
         "Rebaz Sport 3" -> {
             logoResId = R.drawable.rebaz_sport_3
             // ئیتر دەتوانیت لێرەدا پێوانەی تایبەت بە کەناڵی 3 دابنێیت بۆ فول سکرین
             logoWidth = 100.dp
-            logoHeight = 30.dp
+            logoHeight = 27.dp
             logoTop = 15.dp
-            logoRight = 125.dp
+            logoRight = 120.dp
         }
         "Rebaz Sport 4" -> {
             logoResId = R.drawable.rebaz_sport_4
-            logoWidth = 105.dp
-            logoHeight = 40.dp
-            logoTop = 15.dp
-            logoRight = 85.dp
+            logoWidth = 100.dp
+            logoHeight = 27.dp
+            logoTop = 10.dp
+            logoRight = 80.dp
         }
         "Rebaz Sport 5" -> {
             logoResId = R.drawable.rebaz_sport_5
-            logoWidth = 105.dp
-            logoHeight = 40.dp
-            logoTop = 15.dp
-            logoRight = 85.dp
+            logoWidth = 100.dp
+            logoHeight = 27.dp
+            logoTop = 10.dp
+            logoRight = 80.dp
         }
         "Rebaz WWE" -> {
             logoResId = R.drawable.rebaz_wwe
             logoWidth = 105.dp
             logoHeight = 40.dp
             logoTop = 15.dp
-            logoRight = 85.dp
+            logoRight = 80.dp
         }
     }
 
