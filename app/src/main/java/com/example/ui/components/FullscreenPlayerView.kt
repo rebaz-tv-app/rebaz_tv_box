@@ -53,6 +53,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.layout.ContentScale // ⭐ زیاد کرا بۆ کێشان و درێژکردنەوەی لۆگۆکە
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -89,14 +90,14 @@ fun FullscreenPlayerView(
     when (channel?.name) {
         "Rebaz Sport 1" -> {
             logoResId = R.drawable.rebaz_sport_1
-            logoWidth = 100.dp
+            logoWidth = 105.dp
             logoHeight = 27.dp
             logoTop = 15.dp
             logoRight = 120.dp
         }
         "Rebaz Sport 2" -> {
             logoResId = R.drawable.rebaz_sport_2
-            logoWidth = 100.dp
+            logoWidth = 105.dp
             logoHeight = 27.dp
             logoTop = 15.dp
             logoRight = 120.dp
@@ -104,31 +105,31 @@ fun FullscreenPlayerView(
         "Rebaz Sport 3" -> {
             logoResId = R.drawable.rebaz_sport_3
             // ئیتر دەتوانیت لێرەدا پێوانەی تایبەت بە کەناڵی 3 دابنێیت بۆ فول سکرین
-            logoWidth = 100.dp
+            logoWidth = 105.dp
             logoHeight = 27.dp
             logoTop = 15.dp
             logoRight = 120.dp
         }
         "Rebaz Sport 4" -> {
             logoResId = R.drawable.rebaz_sport_4
-            logoWidth = 100.dp
+            logoWidth = 105.dp
             logoHeight = 27.dp
-            logoTop = 10.dp
-            logoRight = 80.dp
+            logoTop = 12.dp
+            logoRight = 100.dp
         }
         "Rebaz Sport 5" -> {
             logoResId = R.drawable.rebaz_sport_5
-            logoWidth = 100.dp
+            logoWidth = 105.dp
             logoHeight = 27.dp
-            logoTop = 10.dp
-            logoRight = 80.dp
+            logoTop = 12.dp
+            logoRight = 100.dp
         }
         "Rebaz WWE" -> {
             logoResId = R.drawable.rebaz_wwe
             logoWidth = 105.dp
             logoHeight = 40.dp
-            logoTop = 15.dp
-            logoRight = 80.dp
+            logoTop = 12.dp
+            logoRight = 100.dp
         }
     }
 
@@ -209,7 +210,8 @@ fun FullscreenPlayerView(
                     .align(AbsoluteAlignment.TopRight)
                     .absolutePadding(top = logoTop, right = logoRight)
                     .width(logoWidth)
-                    .height(logoHeight)
+                    .height(logoHeight),
+                contentScale = ContentScale.FillBounds // ⭐ ئەم دێڕە زیاد کرا بۆ ئەوەی ڕێگە بدات لۆگۆکە بە ئارەزووی خۆت درێژ بێتەوە
             )
         }
 
