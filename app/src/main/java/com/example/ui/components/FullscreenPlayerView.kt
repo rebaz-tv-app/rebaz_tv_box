@@ -162,7 +162,7 @@ fun FullscreenPlayerView(
                 contentDescription = "Channel Logo Fullscreen",
                 modifier = Modifier
                     .align(AbsoluteAlignment.TopRight)
-                    .absolutePadding(top = 10.dp, right = 100.dp) // ژمارەکە زیادکرا تا بچێتە چەپ
+                    .absolutePadding(top = 10.dp, right = 120.dp) // ژمارەکە زیادکرا تا بچێتە چەپ
                     .width(95.dp) 
                     .height(30.dp)
             )
