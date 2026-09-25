@@ -169,7 +169,7 @@ fun PreviewPlayerBox(
                     contentDescription = "Channel Logo",
                     modifier = Modifier
                         .align(AbsoluteAlignment.TopRight)
-                        .absolutePadding(top = 2.dp, right = 9.dp) // ژمارەکە کەمکرایەوە تا بچێتە ڕاست
+                        .absolutePadding(top = 3.dp, right = 9.dp) // ژمارەکە کەمکرایەوە تا بچێتە ڕاست
                         .width(65.dp) 
                         .height(20.dp)
                 )
