@@ -56,7 +56,7 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign // ⭐ ئەمە زیادکرا بۆ چارەسەری کێشەکە
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.exoplayer.ExoPlayer
@@ -79,15 +79,60 @@ fun FullscreenPlayerView(
     onTriggerOsd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val logoResId = when (channel?.name) {
-        "Rebaz Sport 1" -> R.drawable.rebaz_sport_1
-        "Rebaz Sport 2" -> R.drawable.rebaz_sport_2
-        "Rebaz Sport 3" -> R.drawable.rebaz_sport_3
-        "Rebaz Sport 4" -> R.drawable.rebaz_sport_4
-        "Rebaz Sport 5" -> R.drawable.rebaz_sport_5
-        "Rebaz WWE" -> R.drawable.rebaz_wwe
-        else -> null
+    // ⭐ لێرەدا بۆ هەر کەناڵێک لە فول سکرین پێوانەی تایبەت بە خۆی دەدەین
+    var logoResId: Int? = null
+    var logoWidth = 0.dp
+    var logoHeight = 0.dp
+    var logoTop = 0.dp
+    var logoRight = 0.dp
+
+    when (channel?.name) {
+        "Rebaz Sport 1" -> {
+            logoResId = R.drawable.rebaz_sport_1
+            logoWidth = 95.dp
+            logoHeight = 20.dp
+            logoTop = 15.dp
+            logoRight = 125.dp
+        }
+        "Rebaz Sport 2" -> {
+            logoResId = R.drawable.rebaz_sport_2
+            logoWidth = 95.dp
+            logoHeight = 20.dp
+            logoTop = 15.dp
+            logoRight = 125.dp
+        }
+        "Rebaz Sport 3" -> {
+            logoResId = R.drawable.rebaz_sport_3
+            // ئیتر دەتوانیت لێرەدا پێوانەی تایبەت بە کەناڵی 3 دابنێیت بۆ فول سکرین
+            logoWidth = 95.dp
+            logoHeight = 20.dp
+            logoTop = 15.dp
+            logoRight = 125.dp
+        }
+        "Rebaz Sport 4" -> {
+            logoResId = R.drawable.rebaz_sport_4
+            logoWidth = 105.dp
+            logoHeight = 40.dp
+            logoTop = 15.dp
+            logoRight = 85.dp
+        }
+        "Rebaz Sport 5" -> {
+            logoResId = R.drawable.rebaz_sport_5
+            logoWidth = 105.dp
+            logoHeight = 40.dp
+            logoTop = 15.dp
+            logoRight = 85.dp
+        }
+        "Rebaz WWE" -> {
+            logoResId = R.drawable.rebaz_wwe
+            logoWidth = 105.dp
+            logoHeight = 40.dp
+            logoTop = 15.dp
+            logoRight = 85.dp
+        }
     }
+
+    val finalLogoResId = logoResId
 
     BackHandler {
         onBackToPreview()
@@ -155,19 +200,18 @@ fun FullscreenPlayerView(
             modifier = Modifier.fillMaxSize()
         )
 
-                // ⭐ شاشەی فول سکرین: بچووکتر کرا و کەمێک برا بۆ لای چەپ
-        if (logoResId != null) {
+        // بەکارهێنانی گۆڕاوەکان بۆ لۆگۆی دۆخی فول سکرین
+        if (finalLogoResId != null) {
             Image(
-                painter = painterResource(id = logoResId),
+                painter = painterResource(id = finalLogoResId),
                 contentDescription = "Channel Logo Fullscreen",
                 modifier = Modifier
                     .align(AbsoluteAlignment.TopRight)
-                    .absolutePadding(top = 10.dp, right = 120.dp) // ژمارەکە زیادکرا تا بچێتە چەپ
-                    .width(95.dp) 
-                    .height(30.dp)
+                    .absolutePadding(top = logoTop, right = logoRight)
+                    .width(logoWidth)
+                    .height(logoHeight)
             )
         }
-
 
         if (playbackState is PlaybackUiState.Buffering) {
             Box(
