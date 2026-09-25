@@ -54,15 +54,60 @@ fun PreviewPlayerBox(
     onDoubleClickToFullscreen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val logoResId = when (currentChannel?.name) {
-        "Rebaz Sport 1" -> R.drawable.rebaz_sport_1
-        "Rebaz Sport 2" -> R.drawable.rebaz_sport_2
-        "Rebaz Sport 3" -> R.drawable.rebaz_sport_3
-        "Rebaz Sport 4" -> R.drawable.rebaz_sport_4
-        "Rebaz Sport 5" -> R.drawable.rebaz_sport_5
-        "Rebaz WWE" -> R.drawable.rebaz_wwe
-        else -> null
+    // ⭐ لێرەدا بۆ هەر کەناڵێک پێوانەی تایبەت بە خۆی دەدەین
+    var logoResId: Int? = null
+    var logoWidth = 0.dp
+    var logoHeight = 0.dp
+    var logoTop = 0.dp
+    var logoRight = 0.dp
+
+    when (currentChannel?.name) {
+        "Rebaz Sport 1" -> {
+            logoResId = R.drawable.rebaz_sport_1
+            logoWidth = 65.dp
+            logoHeight = 15.dp
+            logoTop = 4.dp
+            logoRight = 10.dp
+        }
+        "Rebaz Sport 2" -> {
+            logoResId = R.drawable.rebaz_sport_2
+            logoWidth = 65.dp
+            logoHeight = 15.dp
+            logoTop = 4.dp
+            logoRight = 10.dp
+        }
+        "Rebaz Sport 3" -> {
+            logoResId = R.drawable.rebaz_sport_3
+            // ئیتر دەتوانیت لێرەدا پێوانەی تایبەت بە کەناڵی 3 دابنێیت
+            logoWidth = 65.dp
+            logoHeight = 15.dp
+            logoTop = 4.dp
+            logoRight = 10.dp
+        }
+        "Rebaz Sport 4" -> {
+            logoResId = R.drawable.rebaz_sport_4
+            logoWidth = 65.dp
+            logoHeight = 15.dp
+            logoTop = 3.dp
+            logoRight = 8.dp
+        }
+        "Rebaz Sport 5" -> {
+            logoResId = R.drawable.rebaz_sport_5
+            logoWidth = 65.dp
+            logoHeight = 15.dp
+            logoTop = 3.dp
+            logoRight = 8.dp
+        }
+        "Rebaz WWE" -> {
+            logoResId = R.drawable.rebaz_wwe
+            logoWidth = 65.dp
+            logoHeight = 15.dp
+            logoTop = 4.dp
+            logoRight = 10.dp
+        }
     }
+
+    val finalLogoResId = logoResId // پاراستنی لۆگۆکە بۆ کاتی دەرخستن
 
     Column(
         modifier = modifier
@@ -157,24 +202,29 @@ fun PreviewPlayerBox(
                                 .clip(CircleShape)
                                 .background(Color(0xFF22C55E))
                         )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "LIVE HD",
+                            color = Color(0xFFE2E8F0),
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }
 
-            // ⭐ گۆڕانکارییەکان بۆ بچووککردنەوە، بەرزکردنەوە و بردنە لای چەپ لە شاشەی پریڤیو
-                        // ⭐ شاشەی پریڤیو: بچووکتر کرا و کەمێک برا بۆ لای ڕاست
-            if (logoResId != null) {
+            // لێرەدا گۆڕاوەکانمان بەکارهێناوە بۆ دروستکردنی لۆگۆکە
+            if (finalLogoResId != null) {
                 Image(
-                    painter = painterResource(id = logoResId),
+                    painter = painterResource(id = finalLogoResId),
                     contentDescription = "Channel Logo",
                     modifier = Modifier
                         .align(AbsoluteAlignment.TopRight)
-                        .absolutePadding(top = 3.dp, right = 9.dp) // ژمارەکە کەمکرایەوە تا بچێتە ڕاست
-                        .width(65.dp) 
-                        .height(20.dp)
+                        .absolutePadding(top = logoTop, right = logoRight)
+                        .width(logoWidth)
+                        .height(logoHeight)
                 )
             }
-
 
             if (playbackState !is PlaybackUiState.Error) {
                 Box(
