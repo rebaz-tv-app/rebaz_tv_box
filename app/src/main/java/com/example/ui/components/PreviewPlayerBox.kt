@@ -66,14 +66,14 @@ fun PreviewPlayerBox(
             logoResId = R.drawable.rebaz_sport_1
             logoWidth = 65.dp
             logoHeight = 15.dp
-            logoTop = 10.dp
+            logoTop = 12.dp
             logoRight = 15.dp
         }
         "Rebaz Sport 2" -> {
             logoResId = R.drawable.rebaz_sport_2
             logoWidth = 65.dp
             logoHeight = 15.dp
-            logoTop = 10.dp
+            logoTop = 12.dp
             logoRight = 15.dp
         }
         "Rebaz Sport 3" -> {
@@ -81,28 +81,28 @@ fun PreviewPlayerBox(
             // ئیتر دەتوانیت لێرەدا پێوانەی تایبەت بە کەناڵی 3 دابنێیت
             logoWidth = 65.dp
             logoHeight = 15.dp
-            logoTop = 10.dp
+            logoTop = 12.dp
             logoRight = 15.dp
         }
         "Rebaz Sport 4" -> {
             logoResId = R.drawable.rebaz_sport_4
             logoWidth = 65.dp
             logoHeight = 15.dp
-            logoTop = 10.dp
+            logoTop = 12.dp
             logoRight = 15.dp
         }
         "Rebaz Sport 5" -> {
             logoResId = R.drawable.rebaz_sport_5
             logoWidth = 65.dp
             logoHeight = 15.dp
-            logoTop = 10.dp
+            logoTop = 9.dp
             logoRight = 15.dp
         }
         "Rebaz WWE" -> {
             logoResId = R.drawable.rebaz_wwe
             logoWidth = 65.dp
             logoHeight = 15.dp
-            logoTop = 10.dp
+            logoTop = 12.dp
             logoRight = 15.dp
         }
     }
