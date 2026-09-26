@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale // ⭐ زیاد کرا بۆ کێشان و درێژکردنەوەی لۆگۆکە
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -66,48 +67,47 @@ fun PreviewPlayerBox(
             logoResId = R.drawable.rebaz_sport_1
             logoWidth = 65.dp
             logoHeight = 15.dp
-            logoTop = 12.dp
+            logoTop = 11.dp
             logoRight = 15.dp
         }
         "Rebaz Sport 2" -> {
             logoResId = R.drawable.rebaz_sport_2
             logoWidth = 65.dp
             logoHeight = 15.dp
-            logoTop = 12.dp
+            logoTop = 11.dp
             logoRight = 15.dp
         }
         "Rebaz Sport 3" -> {
             logoResId = R.drawable.rebaz_sport_3
-            // ئیتر دەتوانیت لێرەدا پێوانەی تایبەت بە کەناڵی 3 دابنێیت
             logoWidth = 65.dp
             logoHeight = 15.dp
-            logoTop = 12.dp
+            logoTop = 11.dp
             logoRight = 15.dp
         }
         "Rebaz Sport 4" -> {
             logoResId = R.drawable.rebaz_sport_4
             logoWidth = 65.dp
             logoHeight = 15.dp
-            logoTop = 12.dp
+            logoTop = 11.dp
             logoRight = 15.dp
         }
         "Rebaz Sport 5" -> {
             logoResId = R.drawable.rebaz_sport_5
             logoWidth = 65.dp
             logoHeight = 15.dp
-            logoTop = 9.dp
+            logoTop = 8.dp
             logoRight = 15.dp
         }
         "Rebaz WWE" -> {
             logoResId = R.drawable.rebaz_wwe
             logoWidth = 65.dp
             logoHeight = 15.dp
-            logoTop = 12.dp
+            logoTop = 11.dp
             logoRight = 15.dp
         }
     }
 
-    val finalLogoResId = logoResId // پاراستنی لۆگۆکە بۆ کاتی دەرخستن
+    val finalLogoResId = logoResId 
 
     Column(
         modifier = modifier
@@ -182,48 +182,26 @@ fun PreviewPlayerBox(
                 }
             }
 
-            if (playbackState is PlaybackUiState.Playing) {
+            // ⭐ باکگراوندێکی ڕەش دروست دەکەین کە لە لای ڕاستەوە درێژ دەبێتەوە بۆ شاردنەوەی لۆگۆی ئەسڵی لە شاشەی پریڤیو
+            if (finalLogoResId != null) {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .align(Alignment.TopStart) 
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(Color(0x99000000))
-                            .padding(horizontal = 6.dp, vertical = 2.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(6.dp)
-                                .clip(CircleShape)
-                                .background(Color(0xFF22C55E))
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = "LIVE HD",
-                            color = Color(0xFFE2E8F0),
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-            }
-
-            // لێرەدا گۆڕاوەکانمان بەکارهێناوە بۆ دروستکردنی لۆگۆکە
-            if (finalLogoResId != null) {
-                Image(
-                    painter = painterResource(id = finalLogoResId),
-                    contentDescription = "Channel Logo",
-                    modifier = Modifier
                         .align(AbsoluteAlignment.TopRight)
-                        .absolutePadding(top = logoTop, right = logoRight)
-                        .width(logoWidth)
+                        .absolutePadding(top = logoTop)
+                        .width(logoWidth + logoRight) 
                         .height(logoHeight)
-                )
+                        .background(Color.Black) 
+                ) {
+                    Image(
+                        painter = painterResource(id = finalLogoResId),
+                        contentDescription = "Channel Logo",
+                        modifier = Modifier
+                            .align(AbsoluteAlignment.CenterLeft) 
+                            .width(logoWidth)
+                            .height(logoHeight),
+                        contentScale = ContentScale.FillBounds 
+                    )
+                }
             }
 
             if (playbackState !is PlaybackUiState.Error) {
