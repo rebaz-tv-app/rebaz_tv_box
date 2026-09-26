@@ -6,6 +6,8 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -56,6 +58,17 @@ fun ActivationScreen(onActivated: () -> Unit) {
             repeatMode = RepeatMode.Reverse
         ), label = "glowAlpha"
     )
+
+    // ⭐ دروستکردنی InteractionSource بۆ زانینی ئەوەی پەنجەی لەسەرە یان نا
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    // دیاریکردنی ڕەنگەکان بەپێی ئەوەی پەنجەی لەسەرە یان نا
+    val buttonColors = if (isPressed) {
+        listOf(Color(0xFF4CAF50), Color(0xFF81C784)) // سەوز لە کاتی دەست لێدان
+    } else {
+        listOf(Color(0xFFFF9800), Color(0xFFFFC107)) // زەرد لە باری ئاساییدا
+    }
 
     Box(
         modifier = Modifier
@@ -171,13 +184,22 @@ fun ActivationScreen(onActivated: () -> Unit) {
                     modifier = Modifier.weight(1.3f).height(44.dp),
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                    contentPadding = PaddingValues()
+                    contentPadding = PaddingValues(),
+                    interactionSource = interactionSource // ⭐ پێدانی InteractionSource بە دوگمەکە
                 ) {
                     Box(
-                        modifier = Modifier.fillMaxSize().background(Brush.horizontalGradient(colors = listOf(Color(0xFFFF9800), Color(0xFFFFC107)))),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Brush.horizontalGradient(colors = buttonColors)), // ⭐ بەکارهێنانی ڕەنگە گۆڕاوەکان
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("چالاککردن", color = Color.Black, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                        // گۆڕینی ڕەنگی نوسینەکە بۆ سپی لە کاتی سەوزبوونی دوگمەکەدا
+                        Text(
+                            "چالاککردن", 
+                            color = if (isPressed) Color.White else Color.Black, 
+                            fontSize = 15.sp, 
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }
