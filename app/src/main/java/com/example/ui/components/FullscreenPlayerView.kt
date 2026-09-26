@@ -53,7 +53,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.layout.ContentScale // ⭐ زیاد کرا بۆ کێشان و درێژکردنەوەی لۆگۆکە
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -80,7 +80,6 @@ fun FullscreenPlayerView(
     onTriggerOsd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // ⭐ لێرەدا بۆ هەر کەناڵێک لە فول سکرین پێوانەی تایبەت بە خۆی دەدەین
     var logoResId: Int? = null
     var logoWidth = 0.dp
     var logoHeight = 0.dp
@@ -104,7 +103,6 @@ fun FullscreenPlayerView(
         }
         "Rebaz Sport 3" -> {
             logoResId = R.drawable.rebaz_sport_3
-            // ئیتر دەتوانیت لێرەدا پێوانەی تایبەت بە کەناڵی 3 دابنێیت بۆ فول سکرین
             logoWidth = 105.dp
             logoHeight = 27.dp
             logoTop = 15.dp
@@ -127,7 +125,7 @@ fun FullscreenPlayerView(
         "Rebaz WWE" -> {
             logoResId = R.drawable.rebaz_wwe
             logoWidth = 105.dp
-            logoHeight = 40.dp
+            logoHeight = 27.dp
             logoTop = 12.dp
             logoRight = 100.dp
         }
@@ -201,18 +199,26 @@ fun FullscreenPlayerView(
             modifier = Modifier.fillMaxSize()
         )
 
-        // بەکارهێنانی گۆڕاوەکان بۆ لۆگۆی دۆخی فول سکرین
+        // ⭐ باکگراوندێکی ڕەش دروست دەکەین کە لە لای ڕاستەوە درێژ دەبێتەوە بۆ شاردنەوەی لۆگۆی ئەسڵی
         if (finalLogoResId != null) {
-            Image(
-                painter = painterResource(id = finalLogoResId),
-                contentDescription = "Channel Logo Fullscreen",
+            Box(
                 modifier = Modifier
                     .align(AbsoluteAlignment.TopRight)
-                    .absolutePadding(top = logoTop, right = logoRight)
-                    .width(logoWidth)
-                    .height(logoHeight),
-                contentScale = ContentScale.FillBounds // ⭐ ئەم دێڕە زیاد کرا بۆ ئەوەی ڕێگە بدات لۆگۆکە بە ئارەزووی خۆت درێژ بێتەوە
-            )
+                    .absolutePadding(top = logoTop)
+                    .width(logoWidth + logoRight) // پانتایی باکگراوندەکە بریتییە لە قەبارەی لۆگۆ + بۆشایی لای ڕاست
+                    .height(logoHeight)
+                    .background(Color.Black) // ڕەنگی ڕەش بۆ شاردنەوە
+            ) {
+                Image(
+                    painter = painterResource(id = finalLogoResId),
+                    contentDescription = "Channel Logo",
+                    modifier = Modifier
+                        .align(AbsoluteAlignment.CenterLeft) // لۆگۆکەی تۆ دەخەینە لای چەپی ئەم سندوقە ڕەشەوە
+                        .width(logoWidth)
+                        .height(logoHeight),
+                    contentScale = ContentScale.FillBounds
+                )
+            }
         }
 
         if (playbackState is PlaybackUiState.Buffering) {
@@ -422,7 +428,7 @@ fun FullscreenPlayerView(
                             Spacer(modifier = Modifier.height(4.dp))
 
                             Text(
-                                text = "${channel?.subtitle ?: ""} • دوگمەی سەر/خوار بۆ گۆڕینی کەناڵ",
+                                text = "${channel?.subtitle ?: ""} • دوگمەی سەر/خوار  بۆ گۆڕینی کەناڵ",
                                 color = Color(0xFFFFD500),
                                 fontSize = 12.sp
                             )
