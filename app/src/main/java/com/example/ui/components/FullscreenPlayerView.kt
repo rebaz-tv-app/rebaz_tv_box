@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import android.content.res.Configuration // ⭐ زیادکراوە بۆ زانینی جۆری ئامێرەکە
 import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -54,6 +55,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration // ⭐ زیادکراوە بۆ خوێندنەوەی شاشەکە
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -80,6 +82,13 @@ fun FullscreenPlayerView(
     onTriggerOsd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // ⭐ دۆزینەوەی ئەوەی ئایا شاشەکە تەلەفزیۆنە یان مۆبایل
+    val configuration = LocalConfiguration.current
+    val isTv = (configuration.uiMode and Configuration.UI_MODE_TYPE_MASK) == Configuration.UI_MODE_TYPE_TELEVISION
+    
+    // ⭐ ئەگەر تیڤی بوو، قەبارەکان 3.5 هێندە گەورەتر دەکات، ئەگەر مۆبایل بوو وەک خۆی (1) دەبێت
+    val scale = if (isTv) 3.5f else 1f
+
     var logoResId: Int? = null
     var logoWidth = 0.dp
     var logoHeight = 0.dp
@@ -89,45 +98,45 @@ fun FullscreenPlayerView(
     when (channel?.name) {
         "Rebaz Sport 1" -> {
             logoResId = R.drawable.rebaz_sport_1
-            logoWidth = 105.dp
-            logoHeight = 27.dp
-            logoTop = 15.dp
-            logoRight = 113.dp
+            logoWidth = 105.dp * scale
+            logoHeight = 27.dp * scale
+            logoTop = 15.dp * scale
+            logoRight = 113.dp * scale
         }
         "Rebaz Sport 2" -> {
             logoResId = R.drawable.rebaz_sport_2
-            logoWidth = 105.dp
-            logoHeight = 27.dp
-            logoTop = 15.dp
-            logoRight = 113.dp
+            logoWidth = 105.dp * scale
+            logoHeight = 27.dp * scale
+            logoTop = 15.dp * scale
+            logoRight = 113.dp * scale
         }
         "Rebaz Sport 3" -> {
             logoResId = R.drawable.rebaz_sport_3
-            logoWidth = 105.dp
-            logoHeight = 27.dp
-            logoTop = 15.dp
-            logoRight = 113.dp
+            logoWidth = 105.dp * scale
+            logoHeight = 27.dp * scale
+            logoTop = 15.dp * scale
+            logoRight = 113.dp * scale
         }
         "Rebaz Sport 4" -> {
             logoResId = R.drawable.rebaz_sport_4
-            logoWidth = 105.dp
-            logoHeight = 27.dp
-            logoTop = 15.dp
-            logoRight = 113.dp
+            logoWidth = 105.dp * scale
+            logoHeight = 27.dp * scale
+            logoTop = 15.dp * scale
+            logoRight = 113.dp * scale
         }
         "Rebaz Sport 5" -> {
             logoResId = R.drawable.rebaz_sport_5
-            logoWidth = 105.dp
-            logoHeight = 27.dp
-            logoTop = 8.dp
-            logoRight = 113.dp
+            logoWidth = 105.dp * scale
+            logoHeight = 27.dp * scale
+            logoTop = 8.dp * scale
+            logoRight = 113.dp * scale
         }
         "Rebaz WWE" -> {
             logoResId = R.drawable.rebaz_wwe
-            logoWidth = 105.dp
-            logoHeight = 27.dp
-            logoTop = 12.dp
-            logoRight = 113.dp
+            logoWidth = 105.dp * scale
+            logoHeight = 27.dp * scale
+            logoTop = 12.dp * scale
+            logoRight = 113.dp * scale
         }
     }
 
