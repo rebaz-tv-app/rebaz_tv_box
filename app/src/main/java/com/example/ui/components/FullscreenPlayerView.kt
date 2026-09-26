@@ -92,42 +92,42 @@ fun FullscreenPlayerView(
             logoWidth = 105.dp
             logoHeight = 27.dp
             logoTop = 15.dp
-            logoRight = 120.dp
+            logoRight = 118.dp
         }
         "Rebaz Sport 2" -> {
             logoResId = R.drawable.rebaz_sport_2
             logoWidth = 105.dp
             logoHeight = 27.dp
             logoTop = 15.dp
-            logoRight = 120.dp
+            logoRight = 118.dp
         }
         "Rebaz Sport 3" -> {
             logoResId = R.drawable.rebaz_sport_3
             logoWidth = 105.dp
             logoHeight = 27.dp
             logoTop = 15.dp
-            logoRight = 120.dp
+            logoRight = 118.dp
         }
         "Rebaz Sport 4" -> {
             logoResId = R.drawable.rebaz_sport_4
             logoWidth = 105.dp
             logoHeight = 27.dp
             logoTop = 12.dp
-            logoRight = 100.dp
+            logoRight = 118.dp
         }
         "Rebaz Sport 5" -> {
             logoResId = R.drawable.rebaz_sport_5
             logoWidth = 105.dp
             logoHeight = 27.dp
-            logoTop = 12.dp
-            logoRight = 100.dp
+            logoTop = 11.dp
+            logoRight = 118.dp
         }
         "Rebaz WWE" -> {
             logoResId = R.drawable.rebaz_wwe
             logoWidth = 105.dp
             logoHeight = 27.dp
             logoTop = 12.dp
-            logoRight = 100.dp
+            logoRight = 118.dp
         }
     }
 
