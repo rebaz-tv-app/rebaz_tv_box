@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -34,7 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration // ⭐ زیادکراوە بۆ پێوانەی شاشەکە
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -56,10 +57,10 @@ fun PreviewPlayerBox(
     onDoubleClickToFullscreen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // ⭐ هێنانە دەرەوەی پانی و بەرزی شاشەکە
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
+    val isTv = (configuration.uiMode and Configuration.UI_MODE_TYPE_MASK) == Configuration.UI_MODE_TYPE_TELEVISION
 
     var logoResId: Int? = null
     var logoWidth = 0.dp
@@ -67,49 +68,34 @@ fun PreviewPlayerBox(
     var logoTop = 0.dp
     var logoRight = 0.dp
 
-    // فۆرمۆڵی گۆڕینەکە بۆ شاشەی بچووک (پریڤیو): 0.08f واتە ٨٪ ی شاشەکە، 0.02f واتە ٢٪ ی شاشەکە
     when (currentChannel?.name) {
-        "Rebaz Sport 1" -> {
-            logoResId = R.drawable.rebaz_sport_1
+        "Rebaz Sport 1", "Rebaz Sport 2", "Rebaz Sport 3", "Rebaz Sport 4" -> {
+            logoResId = when(currentChannel.name) {
+                "Rebaz Sport 1" -> R.drawable.rebaz_sport_1
+                "Rebaz Sport 2" -> R.drawable.rebaz_sport_2
+                "Rebaz Sport 3" -> R.drawable.rebaz_sport_3
+                else -> R.drawable.rebaz_sport_4
+            }
             logoWidth = screenWidth * 0.08f
             logoHeight = screenHeight * 0.04f
-            logoTop = screenHeight * 0.03f
-            logoRight = screenWidth * 0.02f
-        }
-        "Rebaz Sport 2" -> {
-            logoResId = R.drawable.rebaz_sport_2
-            logoWidth = screenWidth * 0.08f
-            logoHeight = screenHeight * 0.04f
-            logoTop = screenHeight * 0.03f
-            logoRight = screenWidth * 0.02f
-        }
-        "Rebaz Sport 3" -> {
-            logoResId = R.drawable.rebaz_sport_3
-            logoWidth = screenWidth * 0.08f
-            logoHeight = screenHeight * 0.04f
-            logoTop = screenHeight * 0.03f
-            logoRight = screenWidth * 0.02f
-        }
-        "Rebaz Sport 4" -> {
-            logoResId = R.drawable.rebaz_sport_4
-            logoWidth = screenWidth * 0.08f
-            logoHeight = screenHeight * 0.04f
-            logoTop = screenHeight * 0.03f
-            logoRight = screenWidth * 0.02f
+            // بۆ مۆبایل دەچێتە خوارەوە (0.04f) و بۆ تیڤی دەچێتە سەرەوە (0.02f)
+            logoTop = if (isTv) (screenHeight * 0.02f) else (screenHeight * 0.04f)
+            // بۆ مۆبایل دەچێتە ڕاست (0.01f) و بۆ تیڤی وەک خۆی (0.02f)
+            logoRight = if (isTv) (screenWidth * 0.02f) else (screenWidth * 0.01f)
         }
         "Rebaz Sport 5" -> {
             logoResId = R.drawable.rebaz_sport_5
             logoWidth = screenWidth * 0.08f
             logoHeight = screenHeight * 0.04f
-            logoTop = screenHeight * 0.02f // پێشتر 8.dp بوو، کەمێک بەرزترە لەوانی تر
-            logoRight = screenWidth * 0.02f
+            logoTop = if (isTv) (screenHeight * 0.01f) else (screenHeight * 0.03f)
+            logoRight = if (isTv) (screenWidth * 0.02f) else (screenWidth * 0.01f)
         }
         "Rebaz WWE" -> {
             logoResId = R.drawable.rebaz_wwe
             logoWidth = screenWidth * 0.08f
             logoHeight = screenHeight * 0.04f
-            logoTop = screenHeight * 0.03f
-            logoRight = screenWidth * 0.02f
+            logoTop = if (isTv) (screenHeight * 0.02f) else (screenHeight * 0.04f)
+            logoRight = if (isTv) (screenWidth * 0.02f) else (screenWidth * 0.01f)
         }
     }
 
@@ -188,7 +174,6 @@ fun PreviewPlayerBox(
                 }
             }
 
-            // باکگراوندە ڕەشەکە و لۆگۆکە بە هەمان سیستەمی پێشوو
             if (finalLogoResId != null) {
                 Box(
                     modifier = Modifier
