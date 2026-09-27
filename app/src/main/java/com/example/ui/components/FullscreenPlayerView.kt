@@ -1,6 +1,5 @@
 package com.example.ui.components
 
-import android.content.res.Configuration // ⭐ زیادکراوە بۆ زانینی جۆری ئامێرەکە
 import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -55,7 +54,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration // ⭐ زیادکراوە بۆ خوێندنەوەی شاشەکە
+import androidx.compose.ui.platform.LocalConfiguration // ⭐ زیادکراوە بۆ پێوانەی شاشەکە
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -82,12 +81,10 @@ fun FullscreenPlayerView(
     onTriggerOsd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // ⭐ دۆزینەوەی ئەوەی ئایا شاشەکە تەلەفزیۆنە یان مۆبایل
+    // ⭐ هێنانە دەرەوەی پانی و بەرزی شاشەکە
     val configuration = LocalConfiguration.current
-    val isTv = (configuration.uiMode and Configuration.UI_MODE_TYPE_MASK) == Configuration.UI_MODE_TYPE_TELEVISION
-    
-    // ⭐ ئەگەر تیڤی بوو، قەبارەکان 3.5 هێندە گەورەتر دەکات، ئەگەر مۆبایل بوو وەک خۆی (1) دەبێت
-    val scale = if (isTv) 3.5f else 1f
+    val screenWidth = configuration.screenWidthDp.dp
+    val screenHeight = configuration.screenHeightDp.dp
 
     var logoResId: Int? = null
     var logoWidth = 0.dp
@@ -95,48 +92,49 @@ fun FullscreenPlayerView(
     var logoTop = 0.dp
     var logoRight = 0.dp
 
+    // فۆرمۆڵی گۆڕینەکە: 0.13f واتە ١٣٪ ی شاشەکە، 0.04f واتە ٤٪ ی شاشەکە
     when (channel?.name) {
         "Rebaz Sport 1" -> {
             logoResId = R.drawable.rebaz_sport_1
-            logoWidth = 105.dp * scale
-            logoHeight = 27.dp * scale
-            logoTop = 15.dp * scale
-            logoRight = 113.dp * scale
+            logoWidth = screenWidth * 0.13f
+            logoHeight = screenHeight * 0.075f
+            logoTop = screenHeight * 0.04f
+            logoRight = screenWidth * 0.14f
         }
         "Rebaz Sport 2" -> {
             logoResId = R.drawable.rebaz_sport_2
-            logoWidth = 105.dp * scale
-            logoHeight = 27.dp * scale
-            logoTop = 15.dp * scale
-            logoRight = 113.dp * scale
+            logoWidth = screenWidth * 0.13f
+            logoHeight = screenHeight * 0.075f
+            logoTop = screenHeight * 0.04f
+            logoRight = screenWidth * 0.14f
         }
         "Rebaz Sport 3" -> {
             logoResId = R.drawable.rebaz_sport_3
-            logoWidth = 105.dp * scale
-            logoHeight = 27.dp * scale
-            logoTop = 15.dp * scale
-            logoRight = 113.dp * scale
+            logoWidth = screenWidth * 0.13f
+            logoHeight = screenHeight * 0.075f
+            logoTop = screenHeight * 0.04f
+            logoRight = screenWidth * 0.14f
         }
         "Rebaz Sport 4" -> {
             logoResId = R.drawable.rebaz_sport_4
-            logoWidth = 105.dp * scale
-            logoHeight = 27.dp * scale
-            logoTop = 15.dp * scale
-            logoRight = 113.dp * scale
+            logoWidth = screenWidth * 0.13f
+            logoHeight = screenHeight * 0.075f
+            logoTop = screenHeight * 0.04f
+            logoRight = screenWidth * 0.14f
         }
         "Rebaz Sport 5" -> {
             logoResId = R.drawable.rebaz_sport_5
-            logoWidth = 105.dp * scale
-            logoHeight = 27.dp * scale
-            logoTop = 8.dp * scale
-            logoRight = 113.dp * scale
+            logoWidth = screenWidth * 0.13f
+            logoHeight = screenHeight * 0.075f
+            logoTop = screenHeight * 0.022f // پێشتر 8.dp بوو
+            logoRight = screenWidth * 0.14f
         }
         "Rebaz WWE" -> {
             logoResId = R.drawable.rebaz_wwe
-            logoWidth = 105.dp * scale
-            logoHeight = 27.dp * scale
-            logoTop = 12.dp * scale
-            logoRight = 113.dp * scale
+            logoWidth = screenWidth * 0.13f
+            logoHeight = screenHeight * 0.075f
+            logoTop = screenHeight * 0.033f // پێشتر 12.dp بوو
+            logoRight = screenWidth * 0.14f
         }
     }
 
@@ -208,21 +206,21 @@ fun FullscreenPlayerView(
             modifier = Modifier.fillMaxSize()
         )
 
-        // ⭐ باکگراوندێکی ڕەش دروست دەکەین کە لە لای ڕاستەوە درێژ دەبێتەوە بۆ شاردنەوەی لۆگۆی ئەسڵی
+        // دروستکردنی لۆگۆکە و ناوچە ڕەشەکە بە هەمان شێوازی پێشوو
         if (finalLogoResId != null) {
             Box(
                 modifier = Modifier
                     .align(AbsoluteAlignment.TopRight)
                     .absolutePadding(top = logoTop)
-                    .width(logoWidth + logoRight) // پانتایی باکگراوندەکە بریتییە لە قەبارەی لۆگۆ + بۆشایی لای ڕاست
+                    .width(logoWidth + logoRight) 
                     .height(logoHeight)
-                    .background(Color.Black) // ڕەنگی ڕەش بۆ شاردنەوە
+                    .background(Color.Black) 
             ) {
                 Image(
                     painter = painterResource(id = finalLogoResId),
                     contentDescription = "Channel Logo",
                     modifier = Modifier
-                        .align(AbsoluteAlignment.CenterLeft) // لۆگۆکەی تۆ دەخەینە لای چەپی ئەم سندوقە ڕەشەوە
+                        .align(AbsoluteAlignment.CenterLeft) 
                         .width(logoWidth)
                         .height(logoHeight),
                     contentScale = ContentScale.FillBounds
