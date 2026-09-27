@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import android.content.res.Configuration
 import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -54,7 +55,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration // ⭐ زیادکراوە بۆ پێوانەی شاشەکە
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -81,10 +82,10 @@ fun FullscreenPlayerView(
     onTriggerOsd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // ⭐ هێنانە دەرەوەی پانی و بەرزی شاشەکە
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
+    val isTv = (configuration.uiMode and Configuration.UI_MODE_TYPE_MASK) == Configuration.UI_MODE_TYPE_TELEVISION
 
     var logoResId: Int? = null
     var logoWidth = 0.dp
@@ -92,49 +93,32 @@ fun FullscreenPlayerView(
     var logoTop = 0.dp
     var logoRight = 0.dp
 
-    // فۆرمۆڵی گۆڕینەکە: 0.13f واتە ١٣٪ ی شاشەکە، 0.04f واتە ٤٪ ی شاشەکە
     when (channel?.name) {
-        "Rebaz Sport 1" -> {
-            logoResId = R.drawable.rebaz_sport_1
+        "Rebaz Sport 1", "Rebaz Sport 2", "Rebaz Sport 3", "Rebaz Sport 4" -> {
+            logoResId = when(channel.name) {
+                "Rebaz Sport 1" -> R.drawable.rebaz_sport_1
+                "Rebaz Sport 2" -> R.drawable.rebaz_sport_2
+                "Rebaz Sport 3" -> R.drawable.rebaz_sport_3
+                else -> R.drawable.rebaz_sport_4
+            }
             logoWidth = screenWidth * 0.13f
             logoHeight = screenHeight * 0.075f
-            logoTop = screenHeight * 0.04f
-            logoRight = screenWidth * 0.14f
-        }
-        "Rebaz Sport 2" -> {
-            logoResId = R.drawable.rebaz_sport_2
-            logoWidth = screenWidth * 0.13f
-            logoHeight = screenHeight * 0.075f
-            logoTop = screenHeight * 0.04f
-            logoRight = screenWidth * 0.14f
-        }
-        "Rebaz Sport 3" -> {
-            logoResId = R.drawable.rebaz_sport_3
-            logoWidth = screenWidth * 0.13f
-            logoHeight = screenHeight * 0.075f
-            logoTop = screenHeight * 0.04f
-            logoRight = screenWidth * 0.14f
-        }
-        "Rebaz Sport 4" -> {
-            logoResId = R.drawable.rebaz_sport_4
-            logoWidth = screenWidth * 0.13f
-            logoHeight = screenHeight * 0.075f
-            logoTop = screenHeight * 0.04f
-            logoRight = screenWidth * 0.14f
+            logoTop = if (isTv) (screenHeight * 0.045f) else (screenHeight * 0.04f)
+            logoRight = if (isTv) (screenWidth * 0.125f) else (screenWidth * 0.14f)
         }
         "Rebaz Sport 5" -> {
             logoResId = R.drawable.rebaz_sport_5
             logoWidth = screenWidth * 0.13f
             logoHeight = screenHeight * 0.075f
-            logoTop = screenHeight * 0.022f // پێشتر 8.dp بوو
-            logoRight = screenWidth * 0.14f
+            logoTop = if (isTv) (screenHeight * 0.027f) else (screenHeight * 0.022f)
+            logoRight = if (isTv) (screenWidth * 0.125f) else (screenWidth * 0.14f)
         }
         "Rebaz WWE" -> {
             logoResId = R.drawable.rebaz_wwe
             logoWidth = screenWidth * 0.13f
             logoHeight = screenHeight * 0.075f
-            logoTop = screenHeight * 0.033f // پێشتر 12.dp بوو
-            logoRight = screenWidth * 0.14f
+            logoTop = if (isTv) (screenHeight * 0.038f) else (screenHeight * 0.033f)
+            logoRight = if (isTv) (screenWidth * 0.125f) else (screenWidth * 0.14f)
         }
     }
 
@@ -206,7 +190,6 @@ fun FullscreenPlayerView(
             modifier = Modifier.fillMaxSize()
         )
 
-        // دروستکردنی لۆگۆکە و ناوچە ڕەشەکە بە هەمان شێوازی پێشوو
         if (finalLogoResId != null) {
             Box(
                 modifier = Modifier
