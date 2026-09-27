@@ -1,6 +1,5 @@
 package com.example.ui.components
 
-import android.content.res.Configuration // ⭐ زیادکراوە بۆ زانینی جۆری ئامێرەکە
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,7 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration // ⭐ زیادکراوە بۆ خوێندنەوەی شاشەکە
+import androidx.compose.ui.platform.LocalConfiguration // ⭐ زیادکراوە بۆ پێوانەی شاشەکە
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -57,12 +56,10 @@ fun PreviewPlayerBox(
     onDoubleClickToFullscreen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // ⭐ دۆزینەوەی ئەوەی ئایا شاشەکە تەلەفزیۆنە یان مۆبایل
+    // ⭐ هێنانە دەرەوەی پانی و بەرزی شاشەکە
     val configuration = LocalConfiguration.current
-    val isTv = (configuration.uiMode and Configuration.UI_MODE_TYPE_MASK) == Configuration.UI_MODE_TYPE_TELEVISION
-    
-    // ⭐ ئەگەر تیڤی بوو، قەبارەکان 3.5 هێندە گەورەتر دەکات، ئەگەر مۆبایل بوو وەک خۆی (1) دەبێت
-    val scale = if (isTv) 3.5f else 1f
+    val screenWidth = configuration.screenWidthDp.dp
+    val screenHeight = configuration.screenHeightDp.dp
 
     var logoResId: Int? = null
     var logoWidth = 0.dp
@@ -70,48 +67,49 @@ fun PreviewPlayerBox(
     var logoTop = 0.dp
     var logoRight = 0.dp
 
+    // فۆرمۆڵی گۆڕینەکە بۆ شاشەی بچووک (پریڤیو): 0.08f واتە ٨٪ ی شاشەکە، 0.02f واتە ٢٪ ی شاشەکە
     when (currentChannel?.name) {
         "Rebaz Sport 1" -> {
             logoResId = R.drawable.rebaz_sport_1
-            logoWidth = 65.dp * scale
-            logoHeight = 15.dp * scale
-            logoTop = 11.dp * scale
-            logoRight = 15.dp * scale
+            logoWidth = screenWidth * 0.08f
+            logoHeight = screenHeight * 0.04f
+            logoTop = screenHeight * 0.03f
+            logoRight = screenWidth * 0.02f
         }
         "Rebaz Sport 2" -> {
             logoResId = R.drawable.rebaz_sport_2
-            logoWidth = 65.dp * scale
-            logoHeight = 15.dp * scale
-            logoTop = 11.dp * scale
-            logoRight = 15.dp * scale
+            logoWidth = screenWidth * 0.08f
+            logoHeight = screenHeight * 0.04f
+            logoTop = screenHeight * 0.03f
+            logoRight = screenWidth * 0.02f
         }
         "Rebaz Sport 3" -> {
             logoResId = R.drawable.rebaz_sport_3
-            logoWidth = 65.dp * scale
-            logoHeight = 15.dp * scale
-            logoTop = 11.dp * scale
-            logoRight = 15.dp * scale
+            logoWidth = screenWidth * 0.08f
+            logoHeight = screenHeight * 0.04f
+            logoTop = screenHeight * 0.03f
+            logoRight = screenWidth * 0.02f
         }
         "Rebaz Sport 4" -> {
             logoResId = R.drawable.rebaz_sport_4
-            logoWidth = 65.dp * scale
-            logoHeight = 15.dp * scale
-            logoTop = 11.dp * scale
-            logoRight = 15.dp * scale
+            logoWidth = screenWidth * 0.08f
+            logoHeight = screenHeight * 0.04f
+            logoTop = screenHeight * 0.03f
+            logoRight = screenWidth * 0.02f
         }
         "Rebaz Sport 5" -> {
             logoResId = R.drawable.rebaz_sport_5
-            logoWidth = 65.dp * scale
-            logoHeight = 15.dp * scale
-            logoTop = 8.dp * scale
-            logoRight = 15.dp * scale
+            logoWidth = screenWidth * 0.08f
+            logoHeight = screenHeight * 0.04f
+            logoTop = screenHeight * 0.02f // پێشتر 8.dp بوو، کەمێک بەرزترە لەوانی تر
+            logoRight = screenWidth * 0.02f
         }
         "Rebaz WWE" -> {
             logoResId = R.drawable.rebaz_wwe
-            logoWidth = 65.dp * scale
-            logoHeight = 15.dp * scale
-            logoTop = 11.dp * scale
-            logoRight = 15.dp * scale
+            logoWidth = screenWidth * 0.08f
+            logoHeight = screenHeight * 0.04f
+            logoTop = screenHeight * 0.03f
+            logoRight = screenWidth * 0.02f
         }
     }
 
@@ -190,6 +188,7 @@ fun PreviewPlayerBox(
                 }
             }
 
+            // باکگراوندە ڕەشەکە و لۆگۆکە بە هەمان سیستەمی پێشوو
             if (finalLogoResId != null) {
                 Box(
                     modifier = Modifier
