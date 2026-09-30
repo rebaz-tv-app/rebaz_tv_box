@@ -14,6 +14,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.DefaultLoadControl
+import androidx.media3.exoplayer.DefaultRenderersFactory // ⭐ ئەمە زیادکراوە بۆ دەنگەکە
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
@@ -125,7 +126,12 @@ class TvPlayerManager(private val context: Context) {
         val dataSourceFactory = DefaultDataSource.Factory(context, httpDataSourceFactory)
         val mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
 
-        exoPlayer = ExoPlayer.Builder(context)
+        // ⭐ چارەسەری بنەڕەتی بۆ کێشەی دەنگ (بەکارخستنی FFmpeg)
+        val renderersFactory = DefaultRenderersFactory(context)
+            .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER)
+
+        // ⭐ لێرەدا renderersFactory مان خستە ناو پلەیەرەکەوە
+        exoPlayer = ExoPlayer.Builder(context, renderersFactory)
             .setTrackSelector(trackSelector)
             .setLoadControl(loadControl)
             .setMediaSourceFactory(mediaSourceFactory)
@@ -141,6 +147,7 @@ class TvPlayerManager(private val context: Context) {
             .apply {
                 playWhenReady = true
                 repeatMode = Player.REPEAT_MODE_ALL
+                volume = 1f // ⭐ دڵنیابوونەوە لەوەی دەنگ میوت نییە
                 addListener(playerListener)
             }
     }
