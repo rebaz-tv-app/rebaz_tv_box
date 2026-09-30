@@ -99,18 +99,12 @@ dependencies {
   implementation(libs.androidx.room.ktx)
   implementation(libs.androidx.room.runtime)
   implementation(libs.coil.compose)
-  
-  // ----- پلەیەر و دەنگەکان -----
   implementation(libs.androidx.media3.exoplayer)
   implementation(libs.androidx.media3.ui)
   implementation(libs.androidx.media3.exoplayer.hls)
   implementation(libs.androidx.media3.exoplayer.dash)
   implementation(libs.androidx.media3.exoplayer.rtsp)
   implementation(libs.androidx.media3.common)
-  // ⭐ ئەمە ئەو دێڕە گرنگەیە کە بۆم زیاد کردیت بۆ کێشەی دەنگەکە (FFmpeg)
-  implementation("androidx.media3:media3-exoplayer-ffmpeg:1.2.0")
-  // ------------------------------
-
   implementation(libs.converter.moshi)
   implementation(libs.firebase.ai)
   // Uncomment to use Firestore:
