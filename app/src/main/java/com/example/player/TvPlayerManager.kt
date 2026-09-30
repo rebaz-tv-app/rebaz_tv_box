@@ -14,7 +14,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.DefaultLoadControl
-import androidx.media3.exoplayer.DefaultRenderersFactory // ⭐ ئەمە زیادکراوە بۆ دەنگەکە
+import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
@@ -116,7 +116,7 @@ class TvPlayerManager(private val context: Context) {
             )
             .build()
 
-        // ناسنامەی ساختە (فێڵ)، تا سێرڤەرەکە وا بزانێت لەسەر وێبگەڕی کۆمپیوتەری ویندۆزە
+        // ناسنامەی ساختە (فێڵ)، تا سێرڤەرەکە وا بزانێت لەسەر وێبگەڕی کۆمپیوتەری ویندۆزە بۆ کێشەی لینکەکان
         val httpDataSourceFactory = DefaultHttpDataSource.Factory()
             .setAllowCrossProtocolRedirects(true)
             .setConnectTimeoutMs(20_000)
@@ -126,11 +126,10 @@ class TvPlayerManager(private val context: Context) {
         val dataSourceFactory = DefaultDataSource.Factory(context, httpDataSourceFactory)
         val mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
 
-        // ⭐ چارەسەری بنەڕەتی بۆ کێشەی دەنگ (بەکارخستنی FFmpeg)
+        // ⭐ چارەسەرە نوێیەکە بۆ دەنگەکە (بەبێ FFmpeg بۆ ئەوەی لە GitHub سوور نەبێت)
         val renderersFactory = DefaultRenderersFactory(context)
-            .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER)
+            .setEnableDecoderFallback(true)
 
-        // ⭐ لێرەدا renderersFactory مان خستە ناو پلەیەرەکەوە
         exoPlayer = ExoPlayer.Builder(context, renderersFactory)
             .setTrackSelector(trackSelector)
             .setLoadControl(loadControl)
@@ -147,7 +146,7 @@ class TvPlayerManager(private val context: Context) {
             .apply {
                 playWhenReady = true
                 repeatMode = Player.REPEAT_MODE_ALL
-                volume = 1f // ⭐ دڵنیابوونەوە لەوەی دەنگ میوت نییە
+                volume = 1f // دڵنیابوونەوە لەوەی دەنگ میوت نییە
                 addListener(playerListener)
             }
     }
