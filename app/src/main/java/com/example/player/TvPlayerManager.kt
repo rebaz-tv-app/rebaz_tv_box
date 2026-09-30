@@ -41,20 +41,19 @@ class TvPlayerManager(private val context: Context) {
     private val _currentStreamUrl = MutableStateFlow<String?>(null)
     val currentStreamUrl: StateFlow<String?> = _currentStreamUrl.asStateFlow()
 
-    // سیستەمی زیرەک بۆ دووبارە هەوڵدانەوە کاتێک پەخش دەپچڕێت
     private var retryCount = 0
-    private val maxRetries = 5 // ٥ جار هەوڵ دەدات پێش ئەوەی شاشە سوورەکە پیشان بدات
+    private val maxRetries = 5 
 
     private val playerListener = object : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: Int) {
             when (playbackState) {
                 Player.STATE_BUFFERING -> _playbackState.value = PlaybackUiState.Buffering
                 Player.STATE_READY -> {
-                    retryCount = 0 // ئەگەر پەخشەکە سەرکەوتوو بوو، ژمارەی هەوڵەکان سفر دەکرێتەوە
+                    retryCount = 0 
                     _playbackState.value = PlaybackUiState.Playing
                 }
                 Player.STATE_ENDED -> {
-                    attemptRetry() // لەجیاتی وەستان، هەوڵی پێکردنەوە دەدات
+                    attemptRetry() 
                 }
                 Player.STATE_IDLE -> {
                     if (exoPlayer?.playerError != null) {
@@ -75,7 +74,6 @@ class TvPlayerManager(private val context: Context) {
                 retryCount++
                 _playbackState.value = PlaybackUiState.Buffering
                 
-                // دوای ٢ چرکە هەوڵی پێکردنەوەی کەناڵەکە دەداتەوە بێ ئەوەی بەکارهێنەر بێزار بکات
                 Handler(Looper.getMainLooper()).postDelayed({
                     _currentStreamUrl.value?.let {
                         exoPlayer?.setMediaItem(MediaItem.fromUri(it))
@@ -106,17 +104,16 @@ class TvPlayerManager(private val context: Context) {
             )
         }
 
-        // خەزنکردنێکی زۆر گەورەتر بۆ ئەوەی زوو نەوەستێت
         val loadControl = DefaultLoadControl.Builder()
             .setBufferDurationsMs(
-                32_000, // کەمترین ٣٢ چرکە خەزن دەکات
-                65_536, // زۆرترین ٦٥ چرکە
+                32_000, 
+                65_536, 
                 2500,
                 5000
             )
             .build()
 
-        // ناسنامەی ساختە (فێڵ)، تا سێرڤەرەکە وا بزانێت لەسەر وێبگەڕی کۆمپیوتەری ویندۆزە بۆ کێشەی لینکەکان
+        // فێڵی ناسنامە بۆ کردنەوەی لینکەکانی وەک K24
         val httpDataSourceFactory = DefaultHttpDataSource.Factory()
             .setAllowCrossProtocolRedirects(true)
             .setConnectTimeoutMs(20_000)
@@ -126,7 +123,7 @@ class TvPlayerManager(private val context: Context) {
         val dataSourceFactory = DefaultDataSource.Factory(context, httpDataSourceFactory)
         val mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
 
-        // ⭐ چارەسەرە نوێیەکە بۆ دەنگەکە (بەبێ FFmpeg بۆ ئەوەی لە GitHub سوور نەبێت)
+        // بەکارهێنانی توانای خودی مۆبایلەکە بۆ دەنگ (لەجیاتی FFmpeg)
         val renderersFactory = DefaultRenderersFactory(context)
             .setEnableDecoderFallback(true)
 
@@ -146,13 +143,13 @@ class TvPlayerManager(private val context: Context) {
             .apply {
                 playWhenReady = true
                 repeatMode = Player.REPEAT_MODE_ALL
-                volume = 1f // دڵنیابوونەوە لەوەی دەنگ میوت نییە
+                volume = 1f 
                 addListener(playerListener)
             }
     }
 
     fun playStream(url: String) {
-        retryCount = 0 // کاتێک کەناڵ دەگۆڕێت با ژمارەی هەوڵەکان سفر ببێتەوە
+        retryCount = 0 
         val player = getPlayer()
         if (url.isBlank()) {
             _currentStreamUrl.value = null
